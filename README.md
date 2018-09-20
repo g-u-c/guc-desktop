@@ -45,7 +45,7 @@
 Clone this repository :
 ```bash
 $ git clone git@github.com:g-u-c/guc-desktop
-$ cd example
+$ cd guc-desktop
 $ yarn
 $ quasar dev --mode electron 
 ```
@@ -55,6 +55,7 @@ $ quasar dev --mode electron
 ```bash
 $ yarn dev # Start a SPA server
 $ yarn dev:ssr # Start a SSR + PWA server
+$ yarn dev:electron # Start electron
 ```
 
 ## Testing (WIP)
@@ -68,6 +69,7 @@ You can build your application for production using :
 ```bash
 $ yarn build # Build your SPA (it places the artifacts at /dist/spa-mat)
 $ yarn build:ssr # Build your SSR + PWA (it places the artifacts at /dist/ssr-mat)
+$ yarn build:electron # Build your electron
 ```
 
 If you want then to clean build artifacts, just do :

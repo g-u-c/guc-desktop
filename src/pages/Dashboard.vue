@@ -14,6 +14,7 @@
             q-item-side(color='secondary' style="margin-left:-1px")
               q-btn(
                 round
+                v-if="config.steemName"
                 :style="`background-image: url('https://steemitimages.com/u/${config.steemName}/avatar')!important; background-size: 42px!important; background-position: center center;`"
               )
             q-item-main
@@ -26,6 +27,7 @@
             q-item-side(color='secondary' style="margin-left:-1px")
               q-btn(
                 round
+                v-if="config.gitUser"
                 :style="`background-image: url('https://github.com/${config.gitUser}.png')!important; background-size: 42px 42px!important;`"
               )
             q-item-main
@@ -83,9 +85,9 @@ export default {
       mdModel: 'Start here',
       tags: ['utopian-io', 'development'],
       config: {
-        steemName: 'nothingismagick',
-        gitUser: 'nothingismagick',
-        gitRepo: 'https://github.com/g-u-c/guc-desktop'
+        steemName: '',
+        gitUser: '',
+        gitRepo: ''
       },
       props: {
         maximum_block_size: this.main().catch()
@@ -100,7 +102,6 @@ export default {
   watch: {
     model: {
       handler (val, oldVal) {
-        // console.log(val)
         this.makeMarkdown(val)
       },
       immediate: true
