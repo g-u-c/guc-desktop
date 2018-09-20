@@ -117,12 +117,13 @@
             q-checkbox(v-model="toHTML" @input="makeMarkdown(mdModel, toHTML)") HTML
             span &nbsp;&nbsp;&nbsp;&nbsp;
             q-checkbox(v-model="contentEditable" @input="!contentEditable" disabled) EDIT (danger!!!)
-        q-fab(
+        q-btn(
+          round
           color="secondary"
           class="fixed"
           style="right: 30px; bottom: 110px"
           icon="cloud_upload"
-          @click.native="publish"
+          @click="publish()"
         )
       q-tab-pane.q-pa-sm(name="Inform")
         .row
@@ -152,7 +153,7 @@
 // import { debounce } from 'quasar'
 import path from 'path'
 import { remote } from 'electron'
-import * as dsteem from 'dsteem'
+// import * as dsteem from 'dsteem'
 
 const filePath = path.join(remote.app.getPath('userData'), '/some.file')
 console.log(filePath)
@@ -161,16 +162,16 @@ export default {
   name: 'PageDashboard',
   data () {
     return {
-      model: 'Start here',
-      mdModel: 'Start here',
+      model: 'Hola!',
+      mdModel: 'Hola!',
       model_ce: '',
       toHTML: false,
       contentEditable: false,
       tags: ['utopian-io', 'development', 'hackathon', 'quasarframework'],
-      postTitle: '',
+      postTitle: 'Hello World',
       config: {
-        steemAccount: '',
-        steemPostingKey: '',
+        steemAccount: 'nothingismagick',
+        steemPostingKey: 'STM8gqDBQVgtAUA41RzYh3VgLMqPnYSsob9n77P6f5yBgvRjkXSXU',
         gitUser: '',
         gitRepo: ''
       },
@@ -216,11 +217,12 @@ export default {
     select (tab) {
       // this.$q.notify(`Tab: ${tab}`)
     },
-    publish () {
-      const parentAuthor = ''
+    publish: async function () {
+      const parentAuthor = 'nothingismagick'
       const mainTag = 'utopian-io'
+      this.$q.notify('Publishing')
 
-      this.$steemClient.broadcast.comment({
+      await this.$steemClient.broadcast.comment({
         author: this.config.steemName,
         body: this.mdModel,
         title: this.postTitle,
@@ -230,9 +232,10 @@ export default {
         parent_author: parentAuthor,
         parent_permlink: mainTag,
         permlink: crypto.getRandomValues(new Uint16Array(1)).toString()
-      }, dsteem.PrivateKey.fromString(this.config.steemPostingKey))
-
-      this.$q.notify(`Published!`)
+      }, this.$steemClient.PrivateKey.fromString(this.config.steemPostingKey)).then((props) => {
+        console.log(props)
+        this.$q.notify(`Published ${this.postTitle}`)
+      }).catch(console.error)
     },
     /** A function to lowercase, hyphenate and truncate the tags
      *
