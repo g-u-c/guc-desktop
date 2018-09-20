@@ -122,10 +122,10 @@ export default {
       this.mdModel = this.$marked(data)
     },
     select (tab) {
-      this.$q.notify(`Tab: ${tab}`)
+      // this.$q.notify(`Tab: ${tab}`)
     },
     publish () {
-      this.$q.notify(this.mdModel)
+      // this.$q.notify(this.mdModel)
     },
     avatarBackgroundCSS: async function (tgt) {
       if (typeof tgt === 'undefined') {
