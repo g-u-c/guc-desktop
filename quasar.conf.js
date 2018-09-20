@@ -1,19 +1,21 @@
 // Configuration for your app
 
 const path = require('path')
-const IconFactory = require('icon-factory')
+// const IconFactory = require('icon-factory')
 
 module.exports = function (ctx) {
   return {
     // app plugins (/src/plugins)
     plugins: [
-      'i18n'
+      'i18n',
+      'dsteem',
+      'marked'
     ],
     css: [
       'app.styl'
     ],
     extras: [
-      ctx.theme.mat ? 'roboto-font' : null,
+      'roboto-font',
       'material-icons',
       'fontawesome'
     ],
@@ -40,7 +42,6 @@ module.exports = function (ctx) {
         chain.resolve.alias
           .set('~', __dirname)
           .set('@', path.resolve(__dirname, 'src'))
-
       }
     },
     devServer: {
@@ -53,6 +54,7 @@ module.exports = function (ctx) {
       components: [
         'QLayout',
         'QLayoutHeader',
+        'QLayoutFooter',
         'QLayoutDrawer',
         'QPageContainer',
         'QPage',
@@ -68,7 +70,16 @@ module.exports = function (ctx) {
         'QItemMain',
         'QItemSide',
         'QItemTile',
-        'QChip'
+        'QChip',
+        'QEditor',
+        'QInput',
+        'QChipsInput',
+        'QTabs',
+        'QTab',
+        'QTabPane',
+        'QFab',
+        'QFabAction',
+        'QPageSticky'
       ],
       directives: [
         'Ripple',

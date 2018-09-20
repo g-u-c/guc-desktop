@@ -9,17 +9,17 @@
 <div align="center">
 
 [![Made with Quasar](https://img.shields.io/badge/made%20with-Quasar-blue.svg?style=for-the-badge)](https://github.com/quasarframework/quasar)
-[![License MIT](https://img.shields.io/github/license/kevinmarrec/quasar-testing-starter.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![License MIT](https://img.shields.io/github/license/g-u-c/guc-desktop.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 </div>
 
 <div align="center">
 
 [![js-standard-style](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
-
+<!--
 [![Build](https://img.shields.io/circleci/project/github/kevinmarrec/quasar-testing-starter/master.svg?style=for-the-badge)](https://circleci.com/gh/kevinmarrec/quasar-testing-starter/tree/master)
 [![Coverage](https://img.shields.io/codecov/c/github/kevinmarrec/quasar-testing-starter/master.svg?style=for-the-badge)](https://codecov.io/gh/kevinmarrec/quasar-testing-starter/branch/master)
-
+-->
 </div>
 
 ## Features ⚡
