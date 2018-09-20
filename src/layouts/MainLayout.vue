@@ -33,6 +33,9 @@
     background:rgba(255, 255, 125, 0.99);
     color:#032764;
   }
+  body {
+    overflow-y: scroll;
+  }
 </style>
 <script>
 import { mixin as i18nMixin } from '@/plugins/i18n'

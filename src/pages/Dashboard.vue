@@ -8,19 +8,20 @@
       q-tab(default slot="title" name="Config" icon="fas fa-cogs" label="Config")
       q-tab(slot="title" name="Editor" icon="fas fa-pen-nib" label="Editor")
       q-tab(slot="title" name="Preview" icon="far fa-eye" label="Preview")
+      q-tab(slot="title" name="Info" icon="far fa-question-circle" label="Info")
       q-tab-pane.q-pa-sm(name="Config")
         .col-6.full-width
           q-item
             q-item-side(color='secondary' style="margin-left:-1px")
               q-btn(
                 round
-                v-if="config.steemName"
-                :style="`background-image: url('https://steemitimages.com/u/${config.steemName}/avatar')!important; background-size: 42px!important; background-position: center center;`"
+                v-if="config.steemAccount"
+                :style="`background-image: url('https://steemitimages.com/u/${config.steemAccount}/avatar')!important; background-size: 42px!important; background-position: center center;`"
               )
             q-item-main
               q-input(
-                v-model="config.steemName"
-                float-label="steem name"
+                v-model="config.steemAccount"
+                float-label="Steem account"
                 placeholder="Which Steem account will you use to post?"
                 )
           q-item
@@ -34,7 +35,7 @@
               q-input(
               type="password"
               v-model="config.steemPostingKey"
-              float-label="steem posting key"
+              float-label="Steem posting key"
               placeholder="Don't use your master key!"
               )
           q-item
@@ -47,7 +48,7 @@
             q-item-main
               q-input(
                 v-model="config.gitUser"
-                float-label="github username"
+                float-label="Github username"
                 placeholder="Enter your username, not an orgname!"
                 )
           q-item
@@ -60,33 +61,58 @@
             q-item-main
               q-input(
                 v-model="config.gitRepo"
-                float-label="git repository"
+                float-label="GIT repository"
                 placeholder="Use a complete repo like https://github.com/g-u-c/guc-desktop"
                 )
-          q-item
-            q-item-side(color='secondary' style="margin-left:-1px")
-              q-btn(
-              round
-              v-if="tags"
-              icon="fas fa-tag"
+
+      q-tab-pane.q-pa-sm.row(name="Editor")
+        q-item.col-md-12
+          q-item-side(color='secondary' style="margin-left:-1px")
+            q-btn(
+            round
+            v-if="tags"
+            icon="fas fa-tag"
+            )
+          q-item-main
+            q-field(:count="5", :max-count="5" :max="6")
+              q-chips-input(
+              color="secondary"
+              float-label="Tags"
+              v-model="tags"
+              @input="steemTag"
               )
-            q-item-main
-              q-field(:count="5", :max-count="5" :max="6")
-                q-chips-input(
-                color="secondary"
-                float-label="tags"
-                v-model="tags"
-                @input="steemTag"
-                )
-      q-tab-pane.q-pa-sm(name="Editor")
-        q-editor(
+        q-item.col-md-12
+          q-item-side(color='secondary' style="margin-left:-1px")
+            q-btn(
+            round
+            v-if="postTitle"
+            icon="rate_review"
+            )
+          q-item-main
+            q-input(
+            v-model="postTitle"
+            float-label="Post Title"
+            placeholder="Keep it short and simple"
+            )
+        q-editor.col-md-12(
         v-model="model"
+        height="60vh"
+        :toolbar="[['bold', 'italic', 'underline', 'strike'],['link'],[{label: 'Sizes', icon: 'format_sizes', list: 'no-icons', options: ['p', 'code', 'h5', 'h4', 'h3', 'h2', 'h1']}]]"
         )
       q-tab-pane.q-pa-sm(name="Preview")
         .row
           .col-12.full-width
-            div {{ tags }}
-            div {{ mdModel }}
+            div STEEM ACOUNT: {{ config.steemAccount }}
+            div TAGS: {{ tags }}
+            .markdownDisplay
+              pre(
+              v-model="model_ce"
+              :contenteditable="contentEditable"
+              @blur="mdModel = model_ce"
+              ) {{ mdModel }}
+            q-checkbox(v-model="toHTML" @input="makeMarkdown(mdModel, toHTML)") HTML
+            span &nbsp;&nbsp;&nbsp;&nbsp;
+            q-checkbox(v-model="contentEditable" @input="!contentEditable" disabled) EDIT (danger!!!)
         q-fab(
           color="secondary"
           class="fixed"
@@ -94,6 +120,10 @@
           icon="cloud_upload"
           @click.native="publish"
         )
+      q-tab-pane.q-pa-sm(name="Info")
+        .row
+          .col-12.full-width
+            div This is where we explain how it works.
 </template>
 
 <style>
@@ -103,6 +133,14 @@
   }
   .q-chip {
     margin:0 10px 0 0!important;
+  }
+  .markdownDisplay {
+    border: 1px solid #333389;
+    min-height: 50%;
+    max-height: 50%;
+    height: 50vh;
+    padding: 10px;
+    overflow: auto;
   }
 </style>
 
@@ -120,9 +158,13 @@ export default {
     return {
       model: 'Start here',
       mdModel: 'Start here',
+      model_ce: '',
+      toHTML: false,
+      contentEditable: false,
       tags: ['utopian-io', 'development'],
+      postTitle: '',
       config: {
-        steemName: '',
+        steemAccount: '',
         steemPostingKey: '',
         gitUser: '',
         gitRepo: ''
@@ -154,8 +196,17 @@ export default {
         this.props = props
       })
     },
-    makeMarkdown (data) {
-      this.mdModel = this.$marked(data)
+    makeMarkdown (data, html) {
+      // let turndownService = new TurndownService()
+      // this.converter = new showdown.Converter()
+      // this.mdModel = this.$showdown.makeHtml(data)
+      // this.mdModel = this.$marked(data)
+      // this.mdModel = this.$turndown.turndown(this.$marked(data))
+      if (this.toHTML === true || html === true) {
+        this.mdModel = this.$marked(data)
+      } else {
+        this.mdModel = this.$turndown.turndown(data)
+      }
     },
     select (tab) {
       // this.$q.notify(`Tab: ${tab}`)
@@ -187,12 +238,12 @@ export default {
      *
      */
     steemTag () {
+      this.tags = this.tags.slice(0, 5)
       this.tags.forEach((tag, index) => {
         this.tags[index] = tag.toLowerCase()
-          .replace(/[_— ]/g, '-')
-          .replace(/[^a-z0-9+-]/gi, '')
+          .replace(/[._— ]/g, '-')
+          .replace(/[^a-z0-9-]/gi, '')
       })
-      this.tags = this.tags.slice(0, 5)
     }
   }
 }
