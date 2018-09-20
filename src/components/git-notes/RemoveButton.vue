@@ -6,14 +6,14 @@
 </style>
 
 <script>
-import { run } from '@/node-utils'
+import { remove } from './index'
 
 /** A button to remove notes
- * @prop {String} commitId SHA-1 of commits. If not provided, it will remove notes in the HEAD (current commit)
- * @prop {String} workingDirectory in case the application not runned in project directory
- * @fires success when notes is removed
- * @fires fail#ErrorMessage when notes fail to removed
- * @example gn-button(commitId="98e34" workingDirectory="/home/user/projects")
+ * @prop {String} [commitId=HEAD] SHA-1 of commits. If not provided, it will remove notes in the HEAD (current commit)
+ * @prop {String} [workingDirectory=process.cwd()] in case the application not runned in project directory
+ * @fires #success when notes is removed
+ * @fires String#fail when notes fail to removed
+ * @example gn-remove-button(commitId="98e34" workingDirectory="/home/user/projects")
  */
 export default {
   name: 'GitNotesRemoveButton',
@@ -25,7 +25,7 @@ export default {
     remove () {
       const cwd = this.workingDirectory
       const sha = this.commitId
-      run('git', ['notes', '--ref=utopian', 'remove', ...(sha ? [sha] : [])], { cwd })
+      remove(cwd, sha)
         .then(data => this.$emit('success'))
         .catch(data => this.$emit('fail', data.toString()))
     }
