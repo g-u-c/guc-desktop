@@ -1,6 +1,7 @@
 // Configuration for your app
 
 const path = require('path')
+const IconFactory = require('icon-factory')
 
 module.exports = function (ctx) {
   return {
@@ -39,6 +40,7 @@ module.exports = function (ctx) {
         chain.resolve.alias
           .set('~', __dirname)
           .set('@', path.resolve(__dirname, 'src'))
+
       }
     },
     devServer: {
@@ -91,8 +93,21 @@ module.exports = function (ctx) {
       // optional; EQUIVALENT to extendWebpack() but uses webpack-chain;
       // for the Main Process ONLY (/src-electron/main-process/)
       chainWebpack (chain) {
-        // chain is an webpack-chain instance
-        // of the Webpack configuration
+        /* use when publishing */
+        /*
+        chain.plugin('icon-factory')
+          .use(IconFactory, [
+            [{
+              preset: 'electron',
+              source: './src/statics/icon-prototype.png',
+              target: './src-electron/icons',
+              options: false,
+              minify: true,
+              mode: false,
+              debug: true
+            }]
+          ])
+          */
       },
 
       bundler: 'builder',

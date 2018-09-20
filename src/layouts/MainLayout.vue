@@ -1,7 +1,9 @@
 <template lang="pug">
   q-layout(view="lHh Lpr lFf")
     q-layout-header
-      q-toolbar.row(color="primary", glossy)
+      q-toolbar.row(color="primary")
+        q-item
+          img(src="/statics/guc-logo-64x64.png")
         q-toolbar-title.col
           span Github-Utopian-Contributor
           div(slot="subtitle") Quasar v{{ $q.version }}
