@@ -73,6 +73,7 @@ module.exports = function (ctx) {
         'QChip',
         'QEditor',
         'QInput',
+        'QField',
         'QChipsInput',
         'QTabs',
         'QTab',

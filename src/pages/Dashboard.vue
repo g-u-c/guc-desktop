@@ -21,39 +21,66 @@
               q-input(
                 v-model="config.steemName"
                 float-label="steem name"
-                placeholder="steem name"
+                placeholder="Which Steem account will you use to post?"
                 )
           q-item
             q-item-side(color='secondary' style="margin-left:-1px")
               q-btn(
-                round
-                v-if="config.gitUser"
-                :style="`background-image: url('https://github.com/${config.gitUser}.png')!important; background-size: 42px 42px!important;`"
+              round
+              v-if="config.steemPostingKey"
+              icon="fas fa-key"
+              )
+            q-item-main
+              q-input(
+              type="password"
+              v-model="config.steemPostingKey"
+              float-label="steem posting key"
+              placeholder="Don't use your master key!"
+              )
+          q-item
+            q-item-side(color='secondary' style="margin-left:-1px")
+              q-btn(
+              round
+              v-if="config.gitUser"
+              :style="`background-image: url('https://github.com/${config.gitUser}.png')!important; background-size: 42px 42px!important;`"
               )
             q-item-main
               q-input(
                 v-model="config.gitUser"
                 float-label="github username"
-                placeholder="@"
-                :before="[{icon: 'fas fa-fingerprint'}]"
-                @change="avatarBackgroundCSS('github')"
+                placeholder="Enter your username, not an orgname!"
                 )
-          q-input(
-            v-model="config.gitRepo"
-            float-label="git repository"
-            placeholder="https://github.com/"
-            :before="[{icon: 'fab fa-git-square'}]"
-            )
-          q-chips-input(
-            float-label="tags"
-            :value="tags"
-            @change="val => { tags = val }"
-            :before="[{icon: 'fas fa-tag'}]"
-            hide-underline
-            )
+          q-item
+            q-item-side(color='secondary' style="margin-left:-1px")
+              q-btn(
+              round
+              v-if="config.gitRepo"
+              icon="fab fa-git-square"
+              )
+            q-item-main
+              q-input(
+                v-model="config.gitRepo"
+                float-label="git repository"
+                placeholder="Use a complete repo like https://github.com/g-u-c/guc-desktop"
+                )
+          q-item
+            q-item-side(color='secondary' style="margin-left:-1px")
+              q-btn(
+              round
+              v-if="tags"
+              icon="fas fa-tag"
+              )
+            q-item-main
+              q-field(:count="5", :max-count="5" :max="6")
+                q-chips-input(
+                color="secondary"
+                float-label="tags"
+                v-model="tags"
+                @input="steemTag"
+                )
       q-tab-pane.q-pa-sm(name="Editor")
         q-editor(
-          v-model="model"
+        v-model="model"
         )
       q-tab-pane.q-pa-sm(name="Preview")
         .row
@@ -63,20 +90,30 @@
         q-fab(
           color="secondary"
           class="fixed"
-          style="right: 18px; bottom: 18px"
+          style="right: 30px; bottom: 110px"
           icon="cloud_upload"
           @click.native="publish"
         )
 </template>
 
 <style>
-  .q-tabs-bar{
+  .q-tabs-bar {
     border-bottom-width:6px!important;
     height: 6px!important;
+  }
+  .q-chip {
+    margin:0 10px 0 0!important;
   }
 </style>
 
 <script>
+// import { debounce } from 'quasar'
+import path from 'path'
+import { remote } from 'electron'
+
+const filePath = path.join(remote.app.getPath('userData'), '/some.file')
+console.log(filePath)
+
 export default {
   name: 'PageDashboard',
   data () {
@@ -86,6 +123,7 @@ export default {
       tags: ['utopian-io', 'development'],
       config: {
         steemName: '',
+        steemPostingKey: '',
         gitUser: '',
         gitRepo: ''
       },
@@ -108,8 +146,6 @@ export default {
     }
   },
   mounted () {
-    this.avatarBackgroundCSS('steem')
-    this.avatarBackgroundCSS('github')
   },
   methods: {
     main: async function () {
@@ -127,17 +163,16 @@ export default {
     publish () {
       // this.$q.notify(this.mdModel)
     },
-    avatarBackgroundCSS: async function (tgt) {
-      if (typeof tgt === 'undefined') {
-        return `background: #417CE4!important; background-size: 32px 32px!important;`
-      } else if (tgt === 'github') {
-        return `background: #417CE4!important; background-image: url('https://github.com/nothingismagick.png')!important; background-size: 32px 32px!important;`
-      } else if (tgt === 'steem') {
-        await this.$steemClient.database.getAccounts({ usernames: this.steemName }).then((props) => {
-          console.log(`${props}`)
-          this.props = props
-        })
-      }
+    /** A function to lowercase, hyphenate and truncate the tags
+     *
+     */
+    steemTag () {
+      this.tags.forEach((tag, index) => {
+        this.tags[index] = tag.toLowerCase()
+          .replace(/[_— ]/g, '-')
+          .replace(/[^a-z0-9+-]/gi, '')
+      })
+      this.tags = this.tags.slice(0, 5)
     }
   }
 }
