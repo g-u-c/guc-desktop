@@ -161,7 +161,27 @@ export default {
       // this.$q.notify(`Tab: ${tab}`)
     },
     publish () {
-      // this.$q.notify(this.mdModel)
+      const publishingKey = this.config.steemPostingKey
+      const author = this.config.steemName
+      const body = this.mdModel
+      const title = ''
+      const tags = this.tags
+      const parentAuthor = ''
+      const mainTag = 'utopian-io'
+
+      this.$steemClient.broadcast.comment({
+        author: author,
+        body: body,
+        title: title,
+        json_metadata: JSON.stringify({
+          tags: tags
+        }),
+        parent_author: parentAuthor,
+        parent_permlink: mainTag,
+        permlink: crypto.getRandomValues(new Uint16Array(1)).toString()
+      }, this.$steemClient.PrivateKey.fromString(publishingKey))
+
+      this.$q.notify(`Publishing!`)
     },
     /** A function to lowercase, hyphenate and truncate the tags
      *
