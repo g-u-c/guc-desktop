@@ -1,9 +1,5 @@
-<div align="center">
-
+<div align="center" markdown="true">
 # Git-Utopian-Contributor Desktop
-
-
-
 </div>
 
 <div align="center">
