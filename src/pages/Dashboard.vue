@@ -63,6 +63,7 @@
                 v-model="config.gitRepo"
                 float-label="GIT repository"
                 placeholder="Use a complete repo like https://github.com/g-u-c/guc-desktop"
+
                 )
 
       q-tab-pane.q-pa-sm.row(name="Edit")
@@ -113,7 +114,7 @@
               v-model="model_ce"
               :contenteditable="contentEditable"
               @blur="mdModel = model_ce"
-              ) {{ mdModel }}
+              ) {{ content.header }} {{ mdModel }} {{ content.footer }}
             q-checkbox(v-model="toHTML" @input="makeMarkdown(mdModel, toHTML)") HTML
             span &nbsp;&nbsp;&nbsp;&nbsp;
             q-checkbox(v-model="contentEditable" @input="!contentEditable" disabled) EDIT (danger!!!)
@@ -147,6 +148,9 @@
     padding: 10px;
     overflow: auto;
   }
+  pre {
+    white-space: pre-wrap;
+  }
 </style>
 
 <script>
@@ -172,11 +176,15 @@ export default {
       config: {
         steemAccount: 'nothingismagick',
         steemPostingKey: '',
-        gitUser: '',
-        gitRepo: ''
+        gitUser: 'nothingismagick',
+        gitRepo: 'https://github.com/g-u-c/guc-desktop'
       },
       props: {
         maximum_block_size: this.main().catch()
+      },
+      content: {
+        header: '',
+        footer: ''
       }
     }
   },
@@ -194,8 +202,22 @@ export default {
     }
   },
   mounted () {
+    this.header()
+    this.footer()
   },
   methods: {
+    header () {
+      this.content.header = `#### Repository
+${this.config.gitRepo}
+
+`
+    },
+    footer () {
+      this.content.footer = `
+#### GitHub Account
+https://github.com/${this.config.gitUser}
+`
+    },
     main: async function () {
       await this.$steemClient.database.getChainProperties().then((props) => {
         console.log(`Maximum blocksize consensus: ${props.maximum_block_size} bytes`)
