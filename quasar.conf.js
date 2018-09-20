@@ -80,7 +80,8 @@ module.exports = function (ctx) {
         'QTabPane',
         'QFab',
         'QFabAction',
-        'QPageSticky'
+        'QPageSticky',
+        'QCheckbox'
       ],
       directives: [
         'Ripple',

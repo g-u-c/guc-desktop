@@ -27,6 +27,9 @@
   "dependencies": {
     "dsteem": "^0.9.0",
     "marked": "^0.5.0",
+    "showdown": "^1.8.6",
+    "turndown": "^5.0.1",
+    "turndown-plugin-gfm": "^1.0.2",
     "vue-i18n": "^8.1.0"
   },
   "devDependencies": {
