@@ -10,10 +10,10 @@ import { run } from '@/node-utils'
 
 /** A button to insert notes
  * @prop {String} notes notes that want to be inserted
- * @prop {String} commitId SHA-1 of commits
+ * @prop {String} commitId SHA-1 of commits. If not provided, it will add notes in the HEAD (current commit)
  * @prop {String} workingDirectory in case the application not runned in project directory
- * @fires success when notes is commited
- * @fires fail#Notes when notes fail to commit
+ * @fires success when notes is committed
+ * @fires fail#ErrorMessage when notes fail to commit
  * @example gn-button(:notes="markdownNotes" commitId="98e34" workingDirectory="/home/user/projects")
  */
 export default {
