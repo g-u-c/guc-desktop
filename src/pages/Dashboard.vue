@@ -6,9 +6,9 @@
       position="top"
       )
       q-tab(default slot="title" name="Config" icon="fas fa-cogs" label="Config")
-      q-tab(slot="title" name="Editor" icon="fas fa-pen-nib" label="Editor")
-      q-tab(slot="title" name="Preview" icon="far fa-eye" label="Preview")
-      q-tab(slot="title" name="Info" icon="far fa-question-circle" label="Info")
+      q-tab(slot="title" name="Edit" icon="fas fa-pen-nib" label="Edit")
+      q-tab(slot="title" name="Review" icon="far fa-eye" label="Review")
+      q-tab(slot="title" name="Inform" icon="far fa-question-circle" label="Inform")
       q-tab-pane.q-pa-sm(name="Config")
         .col-6.full-width
           q-item
@@ -65,16 +65,16 @@
                 placeholder="Use a complete repo like https://github.com/g-u-c/guc-desktop"
                 )
 
-      q-tab-pane.q-pa-sm.row(name="Editor")
+      q-tab-pane.q-pa-sm.row(name="Edit")
         q-item.col-md-12
           q-item-side(color='secondary' style="margin-left:-1px")
             q-btn(
             round
             v-if="tags"
-            icon="fas fa-tag"
+            icon="fas fa-feather"
             )
           q-item-main
-            q-field(:count="5", :max-count="5" :max="6")
+            q-field(:count="5", :max-count="5" :max="5")
               q-chips-input(
               color="secondary"
               float-label="Tags"
@@ -86,7 +86,7 @@
             q-btn(
             round
             v-if="postTitle"
-            icon="rate_review"
+            icon="fas fa-dove"
             )
           q-item-main
             q-input(
@@ -99,11 +99,15 @@
         height="60vh"
         :toolbar="[['bold', 'italic', 'underline', 'strike'],['link'],[{label: 'Sizes', icon: 'format_sizes', list: 'no-icons', options: ['p', 'code', 'h5', 'h4', 'h3', 'h2', 'h1']}]]"
         )
-      q-tab-pane.q-pa-sm(name="Preview")
+      q-tab-pane.q-pa-sm(name="Review")
         .row
           .col-12.full-width
-            div STEEM ACOUNT: {{ config.steemAccount }}
-            div TAGS: {{ tags }}
+            div STEEM ACOUNT:&nbsp;
+              strong {{ config.steemAccount }}
+            div TITLE:&nbsp;
+              strong {{ postTitle }}
+            div TAGS:&nbsp;
+              strong {{ tags }}
             .markdownDisplay
               pre(
               v-model="model_ce"
@@ -120,7 +124,7 @@
           icon="cloud_upload"
           @click.native="publish"
         )
-      q-tab-pane.q-pa-sm(name="Info")
+      q-tab-pane.q-pa-sm(name="Inform")
         .row
           .col-12.full-width
             div This is where we explain how it works.
@@ -161,7 +165,7 @@ export default {
       model_ce: '',
       toHTML: false,
       contentEditable: false,
-      tags: ['utopian-io', 'development'],
+      tags: ['utopian-io', 'development', 'hackathon', 'quasarframework'],
       postTitle: '',
       config: {
         steemAccount: '',
