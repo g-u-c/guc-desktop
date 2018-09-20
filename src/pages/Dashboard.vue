@@ -148,6 +148,7 @@
 // import { debounce } from 'quasar'
 import path from 'path'
 import { remote } from 'electron'
+import * as dsteem from 'dsteem'
 
 const filePath = path.join(remote.app.getPath('userData'), '/some.file')
 console.log(filePath)
@@ -212,27 +213,22 @@ export default {
       // this.$q.notify(`Tab: ${tab}`)
     },
     publish () {
-      const publishingKey = this.config.steemPostingKey
-      const author = this.config.steemName
-      const body = this.mdModel
-      const title = ''
-      const tags = this.tags
       const parentAuthor = ''
       const mainTag = 'utopian-io'
 
       this.$steemClient.broadcast.comment({
-        author: author,
-        body: body,
-        title: title,
+        author: this.config.steemName,
+        body: this.mdModel,
+        title: this.postTitle,
         json_metadata: JSON.stringify({
-          tags: tags
+          tags: this.tags
         }),
         parent_author: parentAuthor,
         parent_permlink: mainTag,
         permlink: crypto.getRandomValues(new Uint16Array(1)).toString()
-      }, this.$steemClient.PrivateKey.fromString(publishingKey))
+      }, dsteem.PrivateKey.fromString(this.config.steemPostingKey))
 
-      this.$q.notify(`Publishing!`)
+      this.$q.notify(`Published!`)
     },
     /** A function to lowercase, hyphenate and truncate the tags
      *
