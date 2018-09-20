@@ -171,7 +171,7 @@ export default {
       postTitle: 'Hello World',
       config: {
         steemAccount: 'nothingismagick',
-        steemPostingKey: 'STM8gqDBQVgtAUA41RzYh3VgLMqPnYSsob9n77P6f5yBgvRjkXSXU',
+        steemPostingKey: '',
         gitUser: '',
         gitRepo: ''
       },
