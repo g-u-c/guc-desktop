@@ -20,7 +20,7 @@ localVue.use(VueRouter)
 localVue.use(Quasar)
 
 export const mountQuasar = (component, options = {}) => {
-  const app= {}
+  const app = {}
   const store = new Vuex.Store({})
   const router = new VueRouter()
 
