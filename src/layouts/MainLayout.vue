@@ -28,6 +28,11 @@
         q-tab(slot="title" name="Preview" icon="far fa-eye" label="Preview")
 </template>
 <style>
+  /* electron fix from https://github.com/electron/electron/issues/4420#issuecomment-242835469 */
+  ::selection {
+    background:rgba(255, 255, 125, 0.99);
+    color:#032764;
+  }
 </style>
 <script>
 import { mixin as i18nMixin } from '@/plugins/i18n'
