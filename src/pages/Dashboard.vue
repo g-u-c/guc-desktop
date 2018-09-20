@@ -6,9 +6,9 @@
       position="top"
       )
       q-tab(default slot="title" name="Config" icon="fas fa-cogs" label="Config")
-      q-tab(slot="title" name="Editor" icon="fas fa-pen-nib" label="Editor")
-      q-tab(slot="title" name="Preview" icon="far fa-eye" label="Preview")
-      q-tab(slot="title" name="Info" icon="far fa-question-circle" label="Info")
+      q-tab(slot="title" name="Edit" icon="fas fa-pen-nib" label="Edit")
+      q-tab(slot="title" name="Review" icon="far fa-eye" label="Review")
+      q-tab(slot="title" name="Inform" icon="far fa-question-circle" label="Inform")
       q-tab-pane.q-pa-sm(name="Config")
         .col-6.full-width
           q-item
@@ -65,16 +65,16 @@
                 placeholder="Use a complete repo like https://github.com/g-u-c/guc-desktop"
                 )
 
-      q-tab-pane.q-pa-sm.row(name="Editor")
+      q-tab-pane.q-pa-sm.row(name="Edit")
         q-item.col-md-12
           q-item-side(color='secondary' style="margin-left:-1px")
             q-btn(
             round
             v-if="tags"
-            icon="fas fa-tag"
+            icon="fas fa-feather"
             )
           q-item-main
-            q-field(:count="5", :max-count="5" :max="6")
+            q-field(:count="5", :max-count="5" :max="5")
               q-chips-input(
               color="secondary"
               float-label="Tags"
@@ -86,7 +86,7 @@
             q-btn(
             round
             v-if="postTitle"
-            icon="rate_review"
+            icon="fas fa-dove"
             )
           q-item-main
             q-input(
@@ -99,11 +99,15 @@
         height="60vh"
         :toolbar="[['bold', 'italic', 'underline', 'strike'],['link'],[{label: 'Sizes', icon: 'format_sizes', list: 'no-icons', options: ['p', 'code', 'h5', 'h4', 'h3', 'h2', 'h1']}]]"
         )
-      q-tab-pane.q-pa-sm(name="Preview")
+      q-tab-pane.q-pa-sm(name="Review")
         .row
           .col-12.full-width
-            div STEEM ACOUNT: {{ config.steemAccount }}
-            div TAGS: {{ tags }}
+            div STEEM ACOUNT:&nbsp;
+              strong {{ config.steemAccount }}
+            div TITLE:&nbsp;
+              strong {{ postTitle }}
+            div TAGS:&nbsp;
+              strong {{ tags }}
             .markdownDisplay
               pre(
               v-model="model_ce"
@@ -113,14 +117,15 @@
             q-checkbox(v-model="toHTML" @input="makeMarkdown(mdModel, toHTML)") HTML
             span &nbsp;&nbsp;&nbsp;&nbsp;
             q-checkbox(v-model="contentEditable" @input="!contentEditable" disabled) EDIT (danger!!!)
-        q-fab(
+        q-btn(
+          round
           color="secondary"
           class="fixed"
           style="right: 30px; bottom: 110px"
           icon="cloud_upload"
-          @click.native="publish"
+          @click="publish()"
         )
-      q-tab-pane.q-pa-sm(name="Info")
+      q-tab-pane.q-pa-sm(name="Inform")
         .row
           .col-12.full-width
             div This is where we explain how it works.
@@ -148,6 +153,7 @@
 // import { debounce } from 'quasar'
 import path from 'path'
 import { remote } from 'electron'
+// import * as dsteem from 'dsteem'
 
 const filePath = path.join(remote.app.getPath('userData'), '/some.file')
 console.log(filePath)
@@ -156,16 +162,16 @@ export default {
   name: 'PageDashboard',
   data () {
     return {
-      model: 'Start here',
-      mdModel: 'Start here',
+      model: 'Hola!',
+      mdModel: 'Hola!',
       model_ce: '',
       toHTML: false,
       contentEditable: false,
-      tags: ['utopian-io', 'development'],
-      postTitle: '',
+      tags: ['utopian-io', 'development', 'hackathon', 'quasarframework'],
+      postTitle: 'Hello World',
       config: {
-        steemAccount: '',
-        steemPostingKey: '',
+        steemAccount: 'nothingismagick',
+        steemPostingKey: 'STM8gqDBQVgtAUA41RzYh3VgLMqPnYSsob9n77P6f5yBgvRjkXSXU',
         gitUser: '',
         gitRepo: ''
       },
@@ -211,8 +217,25 @@ export default {
     select (tab) {
       // this.$q.notify(`Tab: ${tab}`)
     },
-    publish () {
-      // this.$q.notify(this.mdModel)
+    publish: async function () {
+      const parentAuthor = 'nothingismagick'
+      const mainTag = 'utopian-io'
+      this.$q.notify('Publishing')
+
+      await this.$steemClient.broadcast.comment({
+        author: this.config.steemName,
+        body: this.mdModel,
+        title: this.postTitle,
+        json_metadata: JSON.stringify({
+          tags: this.tags
+        }),
+        parent_author: parentAuthor,
+        parent_permlink: mainTag,
+        permlink: crypto.getRandomValues(new Uint16Array(1)).toString()
+      }, this.$steemClient.PrivateKey.fromString(this.config.steemPostingKey)).then((props) => {
+        console.log(props)
+        this.$q.notify(`Published ${this.postTitle}`)
+      }).catch(console.error)
     },
     /** A function to lowercase, hyphenate and truncate the tags
      *
