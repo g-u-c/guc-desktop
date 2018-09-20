@@ -1,9 +1,8 @@
 <div align="center">
 
-# Quasar Testing Starter
+# Git-Utopian-Contributor Desktop
 
-A starter kit to build powerful and amazing native-looking apps, thanks to the Quasar Framework  
-Includes Testing with Coverage and a CI Pipeline
+
 
 </div>
 
@@ -23,12 +22,12 @@ Includes Testing with Coverage and a CI Pipeline
 
 </div>
 
-## Features ⚡️(WIP)
+## Features ⚡
 
 - [Pug](https://github.com/pugjs/pug) Template Engine ✔
 - Internationalization (I18n) ✔
 - SSR compliant using Quasar SSR ✔
-- ...
+- Electron Interface
 
 ## Built-in Tools 🔨
 
@@ -45,9 +44,10 @@ Includes Testing with Coverage and a CI Pipeline
 
 Clone this repository :
 ```bash
-$ git clone git@github.com:kevinmarrec/quasar-testing-starter example
+$ git clone git@github.com:g-u-c/guc-desktop
 $ cd example
 $ yarn
+$ quasar dev --mode electron 
 ```
 
 ## Usage
@@ -113,4 +113,4 @@ $ yarn deploy:ssr # Deploy your SSR + PWA on Now.sh
 
 [MIT](https://opensource.org/licenses/MIT)
 
-Copyright (c) 2018-present, Kevin Marrec
+Copyright (c) 2018-present, Kevin Marrec, D.C. Thompson

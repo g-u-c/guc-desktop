@@ -8,9 +8,9 @@ export default {
   name: 'App',
   meta () {
     return {
-      titleTemplate: title => `Quasar Testing Starter - ${title}`,
+      titleTemplate: title => `Git-Utopian-Contributor - ${title}`,
       meta: {
-        description: { name: 'description', content: 'Main description' },
+        description: { name: 'description', content: '' },
         viewport: {
           name: 'viewport',
           content: this.$q.platform.is.desktop

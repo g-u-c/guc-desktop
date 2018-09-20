@@ -3,7 +3,7 @@
     q-layout-header
       q-toolbar.row(color="primary", glossy)
         q-toolbar-title.col
-          span Quasar Testing Starter
+          span Github-Utopian-Contributor
           div(slot="subtitle") Quasar v{{ $q.version }}
 
         q-btn-dropdown(ref="selectLanguages", v-if="hasMultipleLanguages", icon="language", :label="currentLanguage.code", flat, dense)
