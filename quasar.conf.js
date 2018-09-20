@@ -80,6 +80,26 @@ module.exports = function (ctx) {
       ]
     },
     animations: [],
+    electron: {
+      // optional; webpack config Object for
+      // the Main Process ONLY (/src-electron/main-process/)
+      extendWebpack (cfg) {
+        // directly change props of cfg;
+        // no need to return anything
+      },
+
+      // optional; EQUIVALENT to extendWebpack() but uses webpack-chain;
+      // for the Main Process ONLY (/src-electron/main-process/)
+      chainWebpack (chain) {
+        // chain is an webpack-chain instance
+        // of the Webpack configuration
+      },
+
+      bundler: 'builder',
+      builder: {
+        // ...
+      }
+    },
     ssr: {
       pwa: {
         runtimeCaching: [
