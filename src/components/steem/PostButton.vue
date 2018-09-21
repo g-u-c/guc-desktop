@@ -49,7 +49,7 @@ export default {
   methods: {
     publish () {
       const key = this.postingKey ? PrivateKey.fromString(this.postingKey) : PrivateKey.fromLogin(this.username, this.password, 'posting')
-      this.$steem.testnet.client.broadcast.comment({
+      this.$steem.client.broadcast.comment({
         author: this.username,
         body: this.body,
         title: this.title,
