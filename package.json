@@ -9,9 +9,7 @@
   "scripts": {
     "lint": "eslint {src,test}/**/*.{js,vue}",
     "lint:fix": "eslint --fix {src,test}/**/*.{js,vue}",
-    "dev": "NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev",
-    "dev:ssr": "NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m ssr",
-    "dev:electron": "NODE_OPTIONS=--max_old_space_size=4096 DEBUG=v8:* quasar dev -m electron",
+    "dev": "quasar dev -m electron",
     "test:unit": "jest",
     "test:cover": "jest --coverage",
     "test:cover:open": "quasar serve test/coverage/lcov-report/ --cache 0 --port 8788 --open",

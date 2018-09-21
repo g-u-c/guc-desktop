@@ -169,6 +169,8 @@
           :notes="mdModel"
           :commitId="config.commitId"
           :workingDirectory="config.workingDirectory"
+          @success="$q.notify('created')"
+          @fail="message => $q.notify(message)"
         )
         notes-remove-button.droplet(
           round
@@ -178,6 +180,8 @@
           style="right: 150px; bottom: 30px"
           :commitId="config.commitId"
           :workingDirectory="config.workingDirectory"
+          @success="$q.notify('removed')"
+          @fail="message => $q.notify(message)"
         )
         steem-post-button.droplet(
           round
@@ -190,6 +194,8 @@
           :body="mdModel"
           :password="experimental.steemPostingKey ? config.steemPostingKey : config.steemPassword"
           :tags="tags"
+          @success="$q.notify('published')"
+          @fail="message => $q.notify(message)"
         )
         notes-fetch-button.droplet(
           round
@@ -198,6 +204,8 @@
           color="positive"
           style="right: 330px; bottom: 30px"
           :workingDirectory="config.workingDirectory"
+          @success="data => $q.notify(data)"
+          @fail="message => $q.notify(message)"
         )
         notes-push-button.droplet(
           round
@@ -206,6 +214,8 @@
           color="positive"
           style="right: 100px; bottom: 30px"
           :workingDirectory="config.workingDirectory"
+          @success="$q.notify('pushed')"
+          @fail="message => $q.notify(message)"
         )
 
         //- TODO: move to GitLog.vue
