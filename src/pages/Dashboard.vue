@@ -1,10 +1,9 @@
 <template lang="pug">
   q-page
     q-tabs(
-      @select="select"
       align="justify"
       position="top"
-      )
+    )
       q-tab(default slot="title" name="Config" icon="fas fa-cogs" label="Config")
       q-tab(slot="title" name="Edit" icon="fas fa-pen-nib" label="Edit")
       q-tab(slot="title" name="Review" icon="far fa-eye" label="Review")
@@ -22,7 +21,7 @@
               v-model="config.steemAccount"
               float-label="Steem account"
               placeholder="Which Steem account will you use to post?"
-              )
+            )
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
             q-btn(
@@ -32,100 +31,111 @@
             )
           q-item-main
             q-input(
-            v-model="config.gitUser"
-            float-label="Github username"
-            placeholder="Enter your username, not an orgname!"
+              v-model="config.gitUser"
+              float-label="Github username"
+              placeholder="Enter your username, not an orgname!"
             )
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
             q-btn(
-            round
-            v-if="config.steemPostingKey"
-            icon="fas fa-key"
+              round
+              v-if="(experimental.steemPostingKey ? config.steemPostingKey : false) || config.steemPassword"
+              icon="fas fa-key"
             )
           q-item-main
             q-input(
-            type="password"
-            v-model="config.steemPostingKey"
-            float-label="Password 😂"
-            placeholder="Don't use your master key!"
+              v-if="experimental.steemPostingKey"
+              type="password"
+              v-model="config.steemPostingKey"
+              float-label="Posting key"
+              placeholder="Don't use your master key!"
             )
+            q-input(
+              v-else
+              type="password"
+              v-model="config.steemPassword"
+              float-label="Password"
+              placeholder="Your credential will never be stored or sent 🤞"
+            )
+            q-checkbox.disable(style="transform: scale(1)" v-model="experimental.steemPostingKey" @input="!experimental.steemPostingKey")
+              sup(style="margin-left: 5px") use posting key
+                span.experimental (experimental)
 
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
             q-btn(
-            round
-            v-if="config.gitRepo"
-            icon="fab fa-git-square"
+              round
+              v-if="config.gitRepo"
+              icon="fab fa-git-square"
             )
           q-item-main
             q-input(
               v-model="config.gitRepo"
               float-label="GIT repository"
               placeholder="Use a complete repo like https://github.com/g-u-c/guc-desktop"
-              )
-        q-item.col-md-6
-          q-item-side(color='secondary' style="margin-left:-1px")
-            q-btn(
-            round
-            v-if="config.gitRepo"
-            icon="fas fa-folder"
-            )
-          q-item-main
-            q-input(
-            v-model="config.workingDirectory"
-            float-label="Working Directory"
-            placeholder="Where is the project located on your development machine?"
             )
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
             q-btn(
-            round
-            v-if="config.gitRepo"
-            icon="fas fa-hashtag"
+              round
+              v-if="config.gitRepo"
+              icon="fas fa-folder"
             )
           q-item-main
             q-input(
-            v-model="config.commitId"
-            float-label="Commit ID"
-            placeholder="c0ffee"
+              v-model="config.workingDirectory"
+              float-label="Working Directory"
+              placeholder="Where is the project located on your development machine?"
+            )
+        q-item.col-md-6
+          q-item-side(color='secondary' style="margin-left:-1px")
+            q-btn(
+              round
+              v-if="config.gitRepo"
+              icon="fas fa-hashtag"
+            )
+          q-item-main
+            q-input(
+              v-model="config.commitId"
+              float-label="Commit ID"
+              placeholder="c0ffee"
             )
       q-tab-pane.q-pa-sm.row(name="Edit")
         q-item.col-md-12
           q-item-side(color='secondary' style="margin-left:-1px")
             q-btn(
-            round
-            v-if="tags"
-            icon="fas fa-feather"
+              round
+              v-if="tags"
+              icon="fas fa-feather"
             )
           q-item-main
             q-field(:count="5", :max-count="5" :max="5")
               q-chips-input(
-              color="secondary"
-              float-label="Tags"
-              v-model="tags"
-              @input="steemTag"
+                color="secondary"
+                float-label="Tags"
+                v-model="tags"
+                @input="steemTag"
               )
         q-item.col-md-12
           q-item-side(color='secondary' style="margin-left:-1px")
             q-btn(
-            round
-            v-if="postTitle"
-            icon="fas fa-dove"
+              round
+              v-if="postTitle"
+              icon="fas fa-dove"
             )
           q-item-main
             q-input(
-            v-model="postTitle"
-            float-label="Post Title"
-            placeholder="Keep it short and simple"
+              v-model="postTitle"
+              float-label="Post Title"
+              placeholder="Keep it short and simple"
             )
         // q-btn(icon="visibility" v-bind="$attrs" @click="show")
         // create-button()
         // remove-button()
         q-editor.col-md-12(
-        v-model="model"
-        height="60vh"
-        :toolbar="[['bold', 'italic', 'underline', 'strike'],['link'],[{label: 'Sizes', icon: 'format_sizes', list: 'no-icons', options: ['p', 'code', 'h5', 'h4', 'h3', 'h2', 'h1']}]]"
+          v-model="model"
+          height="60vh"
+          :toolbar="[['bold', 'italic', 'underline', 'strike'],['link'],[{label: 'Sizes', icon: 'format_sizes', list: 'no-icons', options: ['p', 'code', 'h5', 'h4', 'h3', 'h2', 'h1']}]]"
         )
       q-tab-pane.q-pa-sm(name="Review")
         .row
@@ -138,22 +148,26 @@
               strong {{ tags }}
             .markdownDisplay
               pre(
-              v-model="model_ce"
-              :contenteditable="contentEditable"
-              @blur="mdModel = model_ce"
+                v-model="model_ce"
+                :contenteditable="contentEditable"
+                @blur="mdModel = model_ce"
               ) {{ content.header }}{{ mdModel }}{{ content.footer }}
             q-checkbox(v-model="toHTML" @input="makeMarkdown(mdModel, toHTML)") HTML
             span &nbsp;&nbsp;&nbsp;&nbsp;
-            q-checkbox(v-model="contentEditable" @input="!contentEditable" disabled) EDIT (danger!!!)
+            q-checkbox.disable(v-model="contentEditable" @input="!contentEditable")
+              |EDIT
+              span.experimental (danger!!!)
+
         steem-post-button.droplet(
           round
+          class="fixed"
           size="24px"
           color="positive"
           style="right: 200px; bottom: 20px"
           :username="config.steemAccount"
           :title="postTitle"
           :body="mdModel"
-          :password="config.steemPostingKey"
+          :password="experimental.steemPostingKey ? config.steemPostingKey : config.steemPassword"
           :tags="tags"
         )
       q-tab-pane.q-pa-sm(name="Inform")
@@ -163,6 +177,15 @@
 </template>
 
 <style>
+  .disable {
+    cursor: pointer;
+    color: grey;
+  }
+  .experimental {
+    margin-left: 5px;
+    color: rgb(168, 106, 106);
+    font-weight: bold;
+  }
   .droplet {
     border: 5px solid #fff;
     box-shadow: none!important;
@@ -205,6 +228,7 @@ export default {
   components: {
     SteemPostButton
   },
+
   data () {
     return {
       model: 'Hola!',
@@ -214,31 +238,31 @@ export default {
       contentEditable: false,
       tags: ['utopian-io', 'development', 'hackathon', 'quasarframework'],
       postTitle: 'Hello World',
+      experimental: {
+        steemPostingKey: false
+      },
       config: {
-        steemAccount: 'nothingismagick',
+        steemAccount: '',
         steemPostingKey: '',
+        steemPassword: '',
         gitUser: '',
         gitRepo: 'https://github.com/g-u-c/guc-desktop',
         workingDirectory: '/home/user/git/guc-desktop',
         commitId: 'f004881'
       },
-      steemProps: {
-        maximum_block_size: this.main().catch()
-      },
       content: {
         header: '',
         footer: ''
       }
-      // props: {
-      //   maximum_block_size: this.main().catch()
-      // }
     }
   },
+
   meta () {
     return {
       title: 'Dashboard'
     }
   },
+
   watch: {
     model: {
       handler (val, oldVal) {
@@ -247,75 +271,21 @@ export default {
       immediate: true
     }
   },
+
   mounted () {
-    this.header()
-    this.footer()
+    this.content.header = '#### Repository\n' + this.config.gitRepo + '\n\n'
+    this.content.footer = '\n\n---\n#### GitHub Account\n' + `https://github.com/${this.config.gitUser}`
   },
+
   methods: {
-    header () {
-      this.content.header = `#### Repository
-${this.config.gitRepo}
-
-`
-    },
-    footer () {
-      this.content.footer = `
-
-
-#### GitHub Account
-https://github.com/${this.config.gitUser}
-`
-    },
-    main: async function () {
-      await this.$steemClient.database.getChainProperties().then((props) => {
-        console.log(`Maximum blocksize consensus: ${props.maximum_block_size} bytes`)
-        this.steemProps = props
-      })
-    },
     makeMarkdown (data, html) {
-      // let turndownService = new TurndownService()
-      // this.converter = new showdown.Converter()
-      // this.mdModel = this.$showdown.makeHtml(data)
-      // this.mdModel = this.$marked(data)
-      // this.mdModel = this.$turndown.turndown(this.$marked(data))
       if (this.toHTML === true || html === true) {
         this.mdModel = this.$marked(data)
       } else {
         this.mdModel = this.$turndown.turndown(data)
       }
     },
-    select (tab) {
-      // this.$q.notify(`Tab: ${tab}`)
-    },
-    publish () { // WARNING: unused
-      const parentAuthor = ''
-      const mainTag = 'utopian-io'
-      const wif = this.$dsteem.PrivateKey.fromLogin('nothingismagick', this.config.steemPostingKey, 'posting')
-      // const wif = this.$dsteem.PrivateKey.fromString(this.config.steemPostingKey))
-      this.$q.notify('Publishing')
-      this.steemClient = new this.$dsteem.Client('https://api.steemit.com')
-      this.steemClient.broadcast.comment({
-        author: this.config.steemName,
-        body: this.mdModel,
-        title: this.postTitle,
-        json_metadata: JSON.stringify({
-          tags: this.tags
-        }),
-        parent_author: parentAuthor,
-        parent_permlink: mainTag,
-        permlink: new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '').toLowerCase()
-      // }, this.$dsteem.PrivateKey.fromString(this.config.steemPostingKey)).then((result) => {
-      }, wif).then((result) => {
-        console.log(result)
-        this.$q.notify(`Published ${this.postTitle}`)
-      }, function (error) {
-        console.error(error)
-      })
-    },
-    /** A function to lowercase, hyphenate and truncate the tags
-     *
-     */
-    steemTag () {
+    steemTag () { // A function to lowercase, hyphenate and truncate the tags
       this.tags = this.tags.slice(0, 5)
       this.tags.forEach((tag, index) => {
         this.tags[index] = tag.toLowerCase()
