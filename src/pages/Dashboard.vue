@@ -100,6 +100,7 @@
               float-label="Commit ID"
               placeholder="c0ffee"
             )
+
       q-tab-pane.q-pa-sm.row(name="Edit")
         q-item.col-md-12
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -137,6 +138,7 @@
           height="60vh"
           :toolbar="[['bold', 'italic', 'underline', 'strike'],['link'],[{label: 'Sizes', icon: 'format_sizes', list: 'no-icons', options: ['p', 'code', 'h5', 'h4', 'h3', 'h2', 'h1']}]]"
         )
+
       q-tab-pane.q-pa-sm(name="Review")
         .row
           .col-12.full-width
@@ -158,11 +160,30 @@
               |EDIT
               span.experimental (danger!!!)
 
+        notes-create-button.droplet(
+          round
+          class="fixed"
+          size="md"
+          color="positive"
+          style="right: 280px; bottom: 30px"
+          :notes="mdModel"
+          :commitId="config.commitId"
+          :workingDirectory="config.workingDirectory"
+        )
+        notes-remove-button.droplet(
+          round
+          class="fixed"
+          size="md"
+          color="positive"
+          style="right: 150px; bottom: 30px"
+          :commitId="config.commitId"
+          :workingDirectory="config.workingDirectory"
+        )
         steem-post-button.droplet(
           round
           class="fixed"
           size="24px"
-          color="positive"
+          color="blue"
           style="right: 200px; bottom: 20px"
           :username="config.steemAccount"
           :title="postTitle"
@@ -170,6 +191,33 @@
           :password="experimental.steemPostingKey ? config.steemPostingKey : config.steemPassword"
           :tags="tags"
         )
+        notes-fetch-button.droplet(
+          round
+          class="fixed"
+          size="md"
+          color="positive"
+          style="right: 330px; bottom: 30px"
+          :workingDirectory="config.workingDirectory"
+        )
+        notes-push-button.droplet(
+          round
+          class="fixed"
+          size="md"
+          color="positive"
+          style="right: 100px; bottom: 30px"
+          :workingDirectory="config.workingDirectory"
+        )
+
+        //- TODO: move to GitLog.vue
+        q-btn.droplet(
+          rounded
+          class="fixed"
+          size="12px"
+          color="faded"
+          style="left: 5px; bottom: 40px"
+          @click.native="!popup.gitLog"
+        ) {{config.commitId}}
+
       q-tab-pane.q-pa-sm(name="Inform")
         .row
           .col-12.full-width
@@ -219,6 +267,12 @@ import path from 'path'
 import { remote } from 'electron'
 
 import SteemPostButton from '@/components/steem/PostButton.vue'
+import {
+  NotesCreateButton,
+  NotesFetchButton,
+  NotesPushButton,
+  NotesRemoveButton
+} from '@/components/git-notes'
 
 const filePath = path.join(remote.app.getPath('userData'), '/some.file')
 console.log(filePath)
@@ -226,7 +280,11 @@ console.log(filePath)
 export default {
   name: 'PageDashboard',
   components: {
-    SteemPostButton
+    SteemPostButton,
+    NotesCreateButton,
+    NotesFetchButton,
+    NotesPushButton,
+    NotesRemoveButton
   },
 
   data () {
@@ -240,6 +298,9 @@ export default {
       postTitle: 'Hello World',
       experimental: {
         steemPostingKey: false
+      },
+      popup: { // TODO: move to GitLog.vue
+        gitLog: false
       },
       config: {
         steemAccount: '',

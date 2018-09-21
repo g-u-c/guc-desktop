@@ -1,5 +1,6 @@
 <template lang="pug">
   q-btn(icon="cloud_upload" v-bind="$attrs" @click.native="publish")
+    q-tooltip post to Steem
 </template>
 
 <script>
