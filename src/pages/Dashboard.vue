@@ -9,63 +9,87 @@
       q-tab(slot="title" name="Edit" icon="fas fa-pen-nib" label="Edit")
       q-tab(slot="title" name="Review" icon="far fa-eye" label="Review")
       q-tab(slot="title" name="Inform" icon="far fa-question-circle" label="Inform")
-      q-tab-pane.q-pa-sm(name="Config")
-        .col-6.full-width
-          q-item
-            q-item-side(color='secondary' style="margin-left:-1px")
-              q-btn(
-                round
-                v-if="config.steemAccount"
-                :style="`background-image: url('https://steemitimages.com/u/${config.steemAccount}/avatar')!important; background-size: 42px!important; background-position: center center;`"
-              )
-            q-item-main
-              q-input(
-                v-model="config.steemAccount"
-                float-label="Steem account"
-                placeholder="Which Steem account will you use to post?"
-                )
-          q-item
-            q-item-side(color='secondary' style="margin-left:-1px")
-              q-btn(
+      q-tab-pane.q-pa-sm.row(name="Config")
+        q-item.col-md-6
+          q-item-side(color='secondary' style="margin-left:-1px")
+            q-btn(
               round
-              v-if="config.steemPostingKey"
-              icon="fas fa-key"
+              v-if="config.steemAccount"
+              :style="`background-image: url('https://steemitimages.com/u/${config.steemAccount}/avatar')!important; background-size: 42px!important; background-position: center center;`"
+            )
+          q-item-main
+            q-input(
+              v-model="config.steemAccount"
+              float-label="Steem account"
+              placeholder="Which Steem account will you use to post?"
               )
-            q-item-main
-              q-input(
-              type="password"
-              v-model="config.steemPostingKey"
-              float-label="Steem posting key"
-              placeholder="Don't use your master key!"
-              )
-          q-item
-            q-item-side(color='secondary' style="margin-left:-1px")
-              q-btn(
-              round
-              v-if="config.gitUser"
-              :style="`background-image: url('https://github.com/${config.gitUser}.png')!important; background-size: 42px 42px!important;`"
-              )
-            q-item-main
-              q-input(
-                v-model="config.gitUser"
-                float-label="Github username"
-                placeholder="Enter your username, not an orgname!"
-                )
-          q-item
-            q-item-side(color='secondary' style="margin-left:-1px")
-              q-btn(
-              round
-              v-if="config.gitRepo"
-              icon="fab fa-git-square"
-              )
-            q-item-main
-              q-input(
-                v-model="config.gitRepo"
-                float-label="GIT repository"
-                placeholder="Use a complete repo like https://github.com/g-u-c/guc-desktop"
+        q-item.col-md-6
+          q-item-side(color='secondary' style="margin-left:-1px")
+            q-btn(
+            round
+            v-if="config.gitUser"
+            :style="`background-image: url('https://github.com/${config.gitUser}.png')!important; background-size: 42px 42px!important;`"
+            )
+          q-item-main
+            q-input(
+            v-model="config.gitUser"
+            float-label="Github username"
+            placeholder="Enter your username, not an orgname!"
+            )
+        q-item.col-md-6
+          q-item-side(color='secondary' style="margin-left:-1px")
+            q-btn(
+            round
+            v-if="config.steemPostingKey"
+            icon="fas fa-key"
+            )
+          q-item-main
+            q-input(
+            type="password"
+            v-model="config.steemPostingKey"
+            float-label="Steem posting key"
+            placeholder="Don't use your master key!"
+            )
 
-                )
-
+        q-item.col-md-6
+          q-item-side(color='secondary' style="margin-left:-1px")
+            q-btn(
+            round
+            v-if="config.gitRepo"
+            icon="fab fa-git-square"
+            )
+          q-item-main
+            q-input(
+              v-model="config.gitRepo"
+              float-label="GIT repository"
+              placeholder="Use a complete repo like https://github.com/g-u-c/guc-desktop"
+              )
+        q-item.col-md-6
+          q-item-side(color='secondary' style="margin-left:-1px")
+            q-btn(
+            round
+            v-if="config.gitRepo"
+            icon="fas fa-folder"
+            )
+          q-item-main
+            q-input(
+            v-model="config.workingDirectory"
+            float-label="Working Directory"
+            placeholder="Where is the project located on your development machine?"
+            )
+        q-item.col-md-6
+          q-item-side(color='secondary' style="margin-left:-1px")
+            q-btn(
+            round
+            v-if="config.gitRepo"
+            icon="fas fa-hashtag"
+            )
+          q-item-main
+            q-input(
+            v-model="config.commitId"
+            float-label="Commit ID"
+            placeholder="c0ffee"
+            )
       q-tab-pane.q-pa-sm.row(name="Edit")
         q-item.col-md-12
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -95,6 +119,9 @@
             float-label="Post Title"
             placeholder="Keep it short and simple"
             )
+        // q-btn(icon="visibility" v-bind="$attrs" @click="show")
+        // create-button()
+        // remove-button()
         q-editor.col-md-12(
         v-model="model"
         height="60vh"
@@ -114,15 +141,16 @@
               v-model="model_ce"
               :contenteditable="contentEditable"
               @blur="mdModel = model_ce"
-              ) {{ content.header }} {{ mdModel }} {{ content.footer }}
+              ) {{ content.header }}{{ mdModel }}{{ content.footer }}
             q-checkbox(v-model="toHTML" @input="makeMarkdown(mdModel, toHTML)") HTML
             span &nbsp;&nbsp;&nbsp;&nbsp;
             q-checkbox(v-model="contentEditable" @input="!contentEditable" disabled) EDIT (danger!!!)
-        q-btn(
+        q-btn.dropLet(
           round
-          color="secondary"
+          size="24px"
+          color="positive"
           class="fixed"
-          style="right: 30px; bottom: 110px"
+          style="right: 200px; bottom: 20px"
           icon="cloud_upload"
           @click="publish()"
         )
@@ -142,11 +170,18 @@
   }
   .markdownDisplay {
     border: 1px solid #333389;
-    min-height: 50%;
-    max-height: 50%;
-    height: 50vh;
+    height: 350px;
     padding: 10px;
     overflow: auto;
+    resize: vertical
+  }
+  pre {
+    white-space: pre-wrap;
+  }
+  .dropLet {
+    border: 5px solid #fff;
+    z-index: 10000000;
+    box-shadow: none!important;
   }
   pre {
     white-space: pre-wrap;
@@ -155,12 +190,11 @@
 
 <script>
 // import { debounce } from 'quasar'
-import path from 'path'
-import { remote } from 'electron'
-// import * as dsteem from 'dsteem'
+// import path from 'path'
+// import { remote } from 'electron'
+// const filePath = path.join(remote.app.getPath('userData'), '/some.file')
+// console.log(filePath)
 
-const filePath = path.join(remote.app.getPath('userData'), '/some.file')
-console.log(filePath)
 
 export default {
   name: 'PageDashboard',
@@ -176,10 +210,12 @@ export default {
       config: {
         steemAccount: 'nothingismagick',
         steemPostingKey: '',
-        gitUser: 'nothingismagick',
-        gitRepo: 'https://github.com/g-u-c/guc-desktop'
+        gitUser: '',
+        gitRepo: 'https://github.com/g-u-c/guc-desktop',
+        workingDirectory: '/home/denjell/WebstormProjects/Guc-quasar-electron',
+        commitId: 'f004881'
       },
-      props: {
+      steemProps: {
         maximum_block_size: this.main().catch()
       },
       content: {
@@ -214,6 +250,8 @@ ${this.config.gitRepo}
     },
     footer () {
       this.content.footer = `
+      
+
 #### GitHub Account
 https://github.com/${this.config.gitUser}
 `
@@ -221,7 +259,7 @@ https://github.com/${this.config.gitUser}
     main: async function () {
       await this.$steemClient.database.getChainProperties().then((props) => {
         console.log(`Maximum blocksize consensus: ${props.maximum_block_size} bytes`)
-        this.props = props
+        this.steemProps = props
       })
     },
     makeMarkdown (data, html) {
@@ -239,12 +277,14 @@ https://github.com/${this.config.gitUser}
     select (tab) {
       // this.$q.notify(`Tab: ${tab}`)
     },
-    publish: async function () {
-      const parentAuthor = 'nothingismagick'
+    publish () {
+      const parentAuthor = ''
       const mainTag = 'utopian-io'
+      const wif = this.$dsteem.PrivateKey.fromLogin('nothingismagick', this.config.steemPostingKey, 'posting')
+      // const wif = this.$dsteem.PrivateKey.fromString(this.config.steemPostingKey))
       this.$q.notify('Publishing')
-
-      await this.$steemClient.broadcast.comment({
+      this.steemClient = new this.$dsteem.Client('https://api.steemit.com')
+      this.steemClient.broadcast.comment({
         author: this.config.steemName,
         body: this.mdModel,
         title: this.postTitle,
@@ -253,11 +293,15 @@ https://github.com/${this.config.gitUser}
         }),
         parent_author: parentAuthor,
         parent_permlink: mainTag,
-        permlink: crypto.getRandomValues(new Uint16Array(1)).toString()
-      }, this.$steemClient.PrivateKey.fromString(this.config.steemPostingKey)).then((props) => {
-        console.log(props)
+        permlink: new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '').toLowerCase()
+      // }, this.$dsteem.PrivateKey.fromString(this.config.steemPostingKey)).then((result) => {
+      }, wif).then((result) => {
+        console.log(result)
         this.$q.notify(`Published ${this.postTitle}`)
-      }).catch(console.error)
+      }, function (error) {
+        console.error(error)
+      })
+
     },
     /** A function to lowercase, hyphenate and truncate the tags
      *
