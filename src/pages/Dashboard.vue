@@ -315,6 +315,9 @@ export default {
         header: '',
         footer: ''
       }
+      // props: {
+      //   maximum_block_size: this.main().catch()
+      // }
     }
   },
 
