@@ -139,7 +139,6 @@
         // remove-button()
         q-editor.col-md-12(
           v-model="model"
-          height="60vh"
           :toolbar="[['bold', 'italic', 'underline', 'strike'],['link'],[{label: 'Sizes', icon: 'format_sizes', list: 'no-icons', options: ['p', 'code', 'h5', 'h4', 'h3', 'h2', 'h1']}]]"
         )
 

@@ -5,6 +5,7 @@
         // q-item
           img(src="statics/guc-logo-64x64.png")
         q-toolbar-title.col
+          img(src="statics/G-U-C-logo-header.png" height="21px" style="padding-right:10px;margin-bottom:-4px")
           span Github-Utopian-Contributor
           // div(slot="subtitle") Quasar v{{ $q.version }}
 
