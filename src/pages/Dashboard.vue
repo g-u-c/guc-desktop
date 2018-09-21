@@ -4,10 +4,14 @@
       align="justify"
       position="top"
     )
-      q-tab(default slot="title" name="Config" icon="fas fa-cogs" label="Config")
-      q-tab(slot="title" name="Edit" icon="fas fa-pen-nib" label="Edit")
-      q-tab(slot="title" name="Review" icon="far fa-eye" label="Review")
-      q-tab(slot="title" name="Inform" icon="far fa-question-circle" label="Inform")
+      q-tab(default slot="title" name="Config" icon="fas fa-cogs")
+        label {{ $t('pages.interface.config.label') }}
+      q-tab(slot="title" name="Edit" icon="fas fa-pen-nib")
+        label {{ $t('pages.interface.edit.label') }}
+      q-tab(slot="title" name="Review" icon="far fa-eye")
+        label {{ $t('pages.interface.review.label') }}
+      q-tab(slot="title" name="Inform" icon="far fa-question-circle")
+        label {{ $t('pages.interface.inform.label') }}
       q-tab-pane.q-pa-sm.row(name="Config")
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -19,8 +23,8 @@
           q-item-main
             q-input(
               v-model="config.steemAccount"
-              float-label="Steem account"
-              placeholder="Which Steem account will you use to post?"
+              :float-label="$t('pages.interface.config.steemAcount.label')"
+              :placeholder="$t('pages.interface.config.steemAcount.hint')"
             )
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -32,8 +36,8 @@
           q-item-main
             q-input(
               v-model="config.gitUser"
-              float-label="Github username"
-              placeholder="Enter your username, not an orgname!"
+            :float-label="$t('pages.interface.config.gitUser.label')"
+            :placeholder="$t('pages.interface.config.gitUser.hint')"
             )
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -44,22 +48,22 @@
             )
           q-item-main
             q-input(
-              v-if="experimental.steemPostingKey"
-              type="password"
-              v-model="config.steemPostingKey"
-              float-label="Posting key"
-              placeholder="Don't use your master key!"
+            v-if="experimental.steemPostingKey"
+            type="password"
+            v-model="config.steemPostingKey"
+            :float-label="$t('pages.interface.config.steemPostingKey.label')"
+            :placeholder="$t('pages.interface.config.steemPostingKey.hint')"
             )
             q-input(
-              v-else
-              type="password"
-              v-model="config.steemPassword"
-              float-label="Password"
-              placeholder="Your credential will never be stored or sent 🤞"
+            v-else
+            type="password"
+            v-model="config.steemPassword"
+            :float-label="$t('pages.interface.config.steemPassword.label')"
+            :placeholder="$t('pages.interface.config.steemPassword.hint')"
             )
             q-checkbox.disable(style="transform: scale(1)" v-model="experimental.steemPostingKey" @input="!experimental.steemPostingKey")
-              sup(style="margin-left: 5px") use posting key
-                span.experimental (experimental)
+              sup(style="margin-left: 5px") {{ $t('pages.interface.config.usePostingKey') }}
+                span.experimental ({{ $t('pages.interface.config.experimental') }})
 
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -70,9 +74,9 @@
             )
           q-item-main
             q-input(
-              v-model="config.gitRepo"
-              float-label="GIT repository"
-              placeholder="Use a complete repo like https://github.com/g-u-c/guc-desktop"
+            v-model="config.gitRepo"
+            :float-label="$t('pages.interface.config.gitRepo.label')"
+            :placeholder="$t('pages.interface.config.gitRepo.hint')"
             )
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -83,9 +87,9 @@
             )
           q-item-main
             q-input(
-              v-model="config.workingDirectory"
-              float-label="Working Directory"
-              placeholder="Where is the project located on your development machine?"
+            v-model="config.workingDirectory"
+            :float-label="$t('pages.interface.config.workingDirectory.label')"
+            :placeholder="$t('pages.interface.config.workingDirectory.hint')"
             )
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -96,9 +100,9 @@
             )
           q-item-main
             q-input(
-              v-model="config.commitId"
-              float-label="Commit ID"
-              placeholder="c0ffee"
+            v-model="config.commitId"
+            :float-label="$t('pages.interface.config.commitId.label')"
+            :placeholder="$t('pages.interface.config.commitId.hint')"
             )
 
       q-tab-pane.q-pa-sm.row(name="Edit")
@@ -159,7 +163,8 @@
             q-checkbox.disable(v-model="contentEditable" @input="!contentEditable")
               |EDIT
               span.experimental (danger!!!)
-
+            br
+            br
         notes-create-button.droplet(
           round
           class="fixed"
@@ -220,8 +225,19 @@
 
       q-tab-pane.q-pa-sm(name="Inform")
         .row
-          .col-12.full-width
-            div This is where we explain how it works.
+          .col-1
+          .col-10
+            div
+              br
+            div(v-html="$t('pages.interface.inform.p1')")
+              br
+            div
+              br
+            div(v-html="$t('pages.interface.inform.p2')")
+            div
+              br
+            div(v-html="$t('pages.interface.inform.p3')")
+          .col-1
 </template>
 
 <style>
