@@ -14,7 +14,7 @@ export default ({ app, store, Vue, ssrContext }) => {
   // Set i18n instance on app
   app.i18n = new VueI18n({
     locale: currentLocale,
-    fallbackLocale: config.i18n.fallbackTo,
+    fallbackLocale: 'en',
     messages
   })
 
