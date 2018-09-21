@@ -1,4 +1,4 @@
-import * as dsteem from 'dsteem'
+import { Client } from 'dsteem'
 
 export default ({ app, router, Vue, store }) => {
   // TODO: switch to .env file 💪

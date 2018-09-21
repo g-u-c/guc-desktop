@@ -1,9 +1,8 @@
 <template lang="pug">
-  q-fab(
-    color="secondary"
-    class="fixed"
-    style="right: 30px; bottom: 110px"
+  q-btn(
     icon="cloud_upload"
+    class="fixed"
+    v-bind="$attrs"
     @click.native="publish"
   )
 </template>
@@ -52,7 +51,7 @@ export default {
   },
   methods: {
     publish () {
-      this.$steem.testnet.client.broadcast.comment({
+      this.$steem.client.broadcast.comment({
         author: this.username,
         body: this.body,
         title: this.title,
