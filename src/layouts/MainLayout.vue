@@ -2,11 +2,11 @@
   q-layout.no-shadow(view="lHh Lpr lFf")
     q-layout-footer.no-shadow
       q-toolbar.row(color="primary")
-        q-item
+        // q-item
           img(src="statics/guc-logo-64x64.png")
         q-toolbar-title.col
           span Github-Utopian-Contributor
-          div(slot="subtitle") Quasar v{{ $q.version }}
+          // div(slot="subtitle") Quasar v{{ $q.version }}
 
         q-btn-dropdown(ref="selectLanguages", v-if="hasMultipleLanguages", icon="translate", :label="currentLanguage.code", flat, dense)
           q-list(link)
