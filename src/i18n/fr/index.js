@@ -22,7 +22,7 @@ export default {
           hint: 'N\'utilisez pas votre clé principale!'
         },
         gitRepo: {
-          label: 'GIT Dépôt',
+          label: 'GIT Repo',
           hint: 'https://github.com/g-u-c/guc-desktop'
         },
         workingDirectory: {
@@ -45,7 +45,7 @@ export default {
       inform: {
         label: 'Aviser',
         p1: 'Git-Utopian-Contributor (G-U-C) est un outil conçu pour améliorer le workflow de publication pour les développeurs qui souhaitent partager leur travail avec les communautés Steem et Utopian.',
-        p2: 'Fondamentalement, cette application vous permet d\'ajouter des commentaires (et en quelque sorte les cacher) dans des notes git. Vous pourrez documenter votre travail dans git, puis publier ce travail (et certaines parties de celui-ci) dans la chaîne de blocs Steem. Le post est structuré et étiqueté pour être pertinent au sujet du développement de logiciels open source.',
+        p2: 'Fondamentalement, cette application vous permet d\'ajouter des commentaires (et en quelque sorte les cacher) dans des notes GIT. Vous pourrez documenter votre travail dans GIT, puis publier ce travail (et certaines parties de celui-ci) dans la chaîne de blocs Steem. Le post est structuré et étiqueté pour être pertinent au sujet du développement de logiciels open source.',
         p3: 'Réalisé dans le cadre du Hackathon Utopian, septembre 2018.<br><br>MIT License.<br>Équipe: nothingismagick, DrSensor, decebal'
       }
     },
