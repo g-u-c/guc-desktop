@@ -183,6 +183,9 @@
     z-index: 10000000;
     box-shadow: none!important;
   }
+  pre {
+    white-space: pre-wrap;
+  }
 </style>
 
 <script>
@@ -191,6 +194,7 @@
 // import { remote } from 'electron'
 // const filePath = path.join(remote.app.getPath('userData'), '/some.file')
 // console.log(filePath)
+
 
 export default {
   name: 'PageDashboard',
@@ -204,7 +208,7 @@ export default {
       tags: ['utopian-io', 'development', 'hackathon', 'quasarframework'],
       postTitle: 'Hello World',
       config: {
-        steemAccount: '',
+        steemAccount: 'nothingismagick',
         steemPostingKey: '',
         gitUser: '',
         gitRepo: 'https://github.com/g-u-c/guc-desktop',
@@ -246,6 +250,7 @@ ${this.config.gitRepo}
     },
     footer () {
       this.content.footer = `
+      
 
 #### GitHub Account
 https://github.com/${this.config.gitUser}
@@ -296,6 +301,7 @@ https://github.com/${this.config.gitUser}
       }, function (error) {
         console.error(error)
       })
+
     },
     /** A function to lowercase, hyphenate and truncate the tags
      *
