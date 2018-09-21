@@ -113,12 +113,14 @@
             q-checkbox(v-model="toHTML" @input="makeMarkdown(mdModel, toHTML)") HTML
             span &nbsp;&nbsp;&nbsp;&nbsp;
             q-checkbox(v-model="contentEditable" @input="!contentEditable" disabled) EDIT (danger!!!)
-        q-fab(
-          color="secondary"
-          class="fixed"
-          style="right: 30px; bottom: 110px"
-          icon="cloud_upload"
-          @click.native="publish"
+        steem-post-button(
+          :username="config.steemAccount"
+          :title="postTitle"
+          :body="mdModel"
+          :tags="tags"
+          :postingKey="config.steemPostingKey"
+          @success="result => console.log(result)"
+          @fail="error => console.log(error)"
         )
       q-tab-pane.q-pa-sm(name="Info")
         .row
@@ -149,11 +151,16 @@
 import path from 'path'
 import { remote } from 'electron'
 
+import SteemPostButton from '@/components/steem/PostButton.vue'
+
 const filePath = path.join(remote.app.getPath('userData'), '/some.file')
 console.log(filePath)
 
 export default {
   name: 'PageDashboard',
+  components: {
+    SteemPostButton
+  },
   data () {
     return {
       model: 'Start here',
@@ -168,10 +175,10 @@ export default {
         steemPostingKey: '',
         gitUser: '',
         gitRepo: ''
-      },
-      props: {
-        maximum_block_size: this.main().catch()
       }
+      // props: {
+      //   maximum_block_size: this.main().catch()
+      // }
     }
   },
   meta () {
@@ -190,12 +197,12 @@ export default {
   mounted () {
   },
   methods: {
-    main: async function () {
-      await this.$steemClient.database.getChainProperties().then((props) => {
-        console.log(`Maximum blocksize consensus: ${props.maximum_block_size} bytes`)
-        this.props = props
-      })
-    },
+    // main: async function () {
+    //   await this.$steem.testnet.client.database.getChainProperties().then((props) => {
+    //     console.log(`Maximum blocksize consensus: ${props.maximum_block_size} bytes`)
+    //     this.props = props
+    //   })
+    // },
     makeMarkdown (data, html) {
       // let turndownService = new TurndownService()
       // this.converter = new showdown.Converter()
