@@ -195,7 +195,6 @@
 // const filePath = path.join(remote.app.getPath('userData'), '/some.file')
 // console.log(filePath)
 
-
 export default {
   name: 'PageDashboard',
   data () {
@@ -212,7 +211,7 @@ export default {
         steemPostingKey: '',
         gitUser: '',
         gitRepo: 'https://github.com/g-u-c/guc-desktop',
-        workingDirectory: '/home/denjell/WebstormProjects/Guc-quasar-electron',
+        workingDirectory: '/home/user/git/guc-desktop',
         commitId: 'f004881'
       },
       steemProps: {
@@ -250,7 +249,7 @@ ${this.config.gitRepo}
     },
     footer () {
       this.content.footer = `
-      
+
 
 #### GitHub Account
 https://github.com/${this.config.gitUser}
@@ -301,7 +300,6 @@ https://github.com/${this.config.gitUser}
       }, function (error) {
         console.error(error)
       })
-
     },
     /** A function to lowercase, hyphenate and truncate the tags
      *
