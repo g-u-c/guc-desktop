@@ -30,3 +30,8 @@ export const fetch = async (cwd) => {
     return result.stdout
   } catch (error) { throw error }
 }
+
+export { default as NotesCreateButton } from './CreateButton.vue'
+export { default as NotesFetchButton } from './FetchButton.vue'
+export { default as NotesPushButton } from './PushButton.vue'
+export { default as NotesRemoveButton } from './RemoveButton.vue'

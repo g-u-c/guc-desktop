@@ -1,5 +1,6 @@
 <template lang="pug">
   q-btn(icon="cloud_upload" v-bind="$attrs" @click.native="push")
+    q-tooltip git push refs/notes/utopian
 </template>
 
 <style>
