@@ -1,5 +1,5 @@
 <template lang="pug">
-  q-btn(icon="cloud_download" v-bind="$attrs" @click="fetch")
+  q-btn(icon="cloud_download" v-bind="$attrs" @click.native="fetch")
 </template>
 
 <style>

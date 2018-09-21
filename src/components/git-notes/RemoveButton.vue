@@ -1,5 +1,5 @@
 <template lang="pug">
-  q-btn(icon="delete" v-bind="$attrs" @click="remove")
+  q-btn(icon="delete" v-bind="$attrs" @click.native="remove")
 </template>
 
 <style>

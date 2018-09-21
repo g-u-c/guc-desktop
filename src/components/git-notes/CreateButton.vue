@@ -1,5 +1,5 @@
 <template lang="pug">
-  q-btn(icon="create" v-bind="$attrs" @click="add")
+  q-btn(icon="create" v-bind="$attrs" @click.native="add")
 </template>
 
 <style>
