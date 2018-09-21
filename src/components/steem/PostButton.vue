@@ -13,10 +13,10 @@ import { PrivateKey } from 'dsteem'
 
 /** Creates an account, note that almost no validation is done.
  * @prop {String} username - username of the account
+ * @prop {String} password - password of the account
  * @prop {Array<String>} tags - The main tag for the post
  * @prop {String} title - Title of the post
  * @prop {String} body - body (content) of the post.
- * @prop {String} postingKey - Private Key of posting
  * @fires TransactionConfirmation#success - when successfully post
  * @fires ??#fail - when failed
  */
@@ -35,7 +35,12 @@ export default {
       type: String,
       required: true
     },
-    postingKey: {
+    // 🐛BUG: can't get `PrivateKey.fromString(this.postingKey)` work 😢
+    // postingKey: {
+    //   type: String,
+    //   required: true
+    // },
+    password: {
       type: String,
       required: true
     },
@@ -47,7 +52,7 @@ export default {
   },
   methods: {
     publish () {
-      this.$steem.client.broadcast.comment({
+      this.$steem.testnet.client.broadcast.comment({
         author: this.username,
         body: this.body,
         title: this.title,
@@ -57,7 +62,7 @@ export default {
         parent_author: '',
         parent_permlink: this.tags[0],
         permlink: new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '').toLowerCase()
-      }, PrivateKey.fromString(this.postingKey))
+      }, PrivateKey.fromLogin(this.username, this.password, 'posting'))
         .then(result => this.$emit('success', result))
         .catch(error => this.$emit('fail', error))
     }
