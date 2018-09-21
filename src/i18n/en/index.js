@@ -3,7 +3,7 @@ export default {
     interface: {
       config: {
         label: 'Config',
-        steemAcount: {
+        steemAccount: {
           label: 'Steem Account',
           hint: 'Which Steem Account will you use to post?'
         },
@@ -46,7 +46,7 @@ export default {
         label: 'Inform',
         p1: 'Git-Utopian-Contributor (G-U-C) is a tool that was made to enhance the publishing workflow for developers who want to share their work with the Steem and Utopian communities.',
         p2: 'Basically, this app allows you to add comments (and sort of hide them) in git notes. You will be able to document your work within git, and then publish this work (and parts of it) to the Steem blockchain. The post is structured and tagged to be relevant to the topic of open-source software development.',
-        p3: 'Made in the context of the Utopian Hackathon, September, 2018. MIT Licensed'
+        p3: 'Made in the context of the Utopian Hackathon, September, 2018.<br><br>MIT License.<br>Team: nothingismagick, DrSensor, decebal'
       }
     },
     dashboard: {

@@ -23,8 +23,8 @@
           q-item-main
             q-input(
               v-model="config.steemAccount"
-              :float-label="$t('pages.interface.config.steemAcount.label')"
-              :placeholder="$t('pages.interface.config.steemAcount.hint')"
+              :float-label="$t('pages.interface.config.steemAccount.label')"
+              :placeholder="$t('pages.interface.config.steemAccount.hint')"
             )
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -117,7 +117,7 @@
             q-field(:count="5", :max-count="5" :max="5")
               q-chips-input(
                 color="secondary"
-                float-label="Tags"
+                :float-label="$t('pages.interface.edit.tags')"
                 v-model="tags"
                 @input="steemTag"
               )
@@ -131,7 +131,7 @@
           q-item-main
             q-input(
               v-model="postTitle"
-              float-label="Post Title"
+              :float-label="$t('pages.interface.edit.postTitle')"
               placeholder="Keep it short and simple"
             )
         // q-btn(icon="visibility" v-bind="$attrs" @click="show")
@@ -146,11 +146,11 @@
       q-tab-pane.q-pa-sm(name="Review")
         .row
           .col-12.full-width
-            div STEEM ACOUNT:&nbsp;
+            div {{ $t('pages.interface.config.steemAccount.label') }}:&nbsp;
               strong {{ config.steemAccount }}
-            div TITLE:&nbsp;
+            div {{ $t('pages.interface.edit.postTitle') }}:&nbsp;
               strong {{ postTitle }}
-            div TAGS:&nbsp;
+            div {{ $t('pages.interface.edit.tags') }}:&nbsp;
               strong {{ tags }}
             .markdownDisplay
               pre(
@@ -253,7 +253,7 @@
   .droplet {
     border: 5px solid #fff;
     box-shadow: none!important;
-    z-index: 1000000;
+    z-index: 2000;
   }
   .q-tabs-bar {
     border-bottom-width:6px!important;
