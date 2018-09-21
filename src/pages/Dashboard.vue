@@ -47,7 +47,7 @@
             q-input(
             type="password"
             v-model="config.steemPostingKey"
-            float-label="Steem posting key"
+            float-label="Password 😂"
             placeholder="Don't use your master key!"
             )
 
@@ -145,14 +145,16 @@
             q-checkbox(v-model="toHTML" @input="makeMarkdown(mdModel, toHTML)") HTML
             span &nbsp;&nbsp;&nbsp;&nbsp;
             q-checkbox(v-model="contentEditable" @input="!contentEditable" disabled) EDIT (danger!!!)
-        q-btn.dropLet(
+        steem-post-button.droplet(
           round
           size="24px"
           color="positive"
-          class="fixed"
           style="right: 200px; bottom: 20px"
-          icon="cloud_upload"
-          @click="publish()"
+          :username="config.steemAccount"
+          :title="postTitle"
+          :body="mdModel"
+          :password="config.steemPostingKey"
+          :tags="tags"
         )
       q-tab-pane.q-pa-sm(name="Inform")
         .row
@@ -161,6 +163,11 @@
 </template>
 
 <style>
+  .droplet {
+    border: 5px solid #fff;
+    box-shadow: none!important;
+    z-index: 1000000;
+  }
   .q-tabs-bar {
     border-bottom-width:6px!important;
     height: 6px!important;
@@ -178,11 +185,6 @@
   pre {
     white-space: pre-wrap;
   }
-  .dropLet {
-    border: 5px solid #fff;
-    z-index: 10000000;
-    box-shadow: none!important;
-  }
   pre {
     white-space: pre-wrap;
   }
@@ -190,13 +192,19 @@
 
 <script>
 // import { debounce } from 'quasar'
-// import path from 'path'
-// import { remote } from 'electron'
-// const filePath = path.join(remote.app.getPath('userData'), '/some.file')
-// console.log(filePath)
+import path from 'path'
+import { remote } from 'electron'
+
+import SteemPostButton from '@/components/steem/PostButton.vue'
+
+const filePath = path.join(remote.app.getPath('userData'), '/some.file')
+console.log(filePath)
 
 export default {
   name: 'PageDashboard',
+  components: {
+    SteemPostButton
+  },
   data () {
     return {
       model: 'Hola!',
@@ -221,6 +229,9 @@ export default {
         header: '',
         footer: ''
       }
+      // props: {
+      //   maximum_block_size: this.main().catch()
+      // }
     }
   },
   meta () {
@@ -276,7 +287,7 @@ https://github.com/${this.config.gitUser}
     select (tab) {
       // this.$q.notify(`Tab: ${tab}`)
     },
-    publish () {
+    publish () { // WARNING: unused
       const parentAuthor = ''
       const mainTag = 'utopian-io'
       const wif = this.$dsteem.PrivateKey.fromLogin('nothingismagick', this.config.steemPostingKey, 'posting')
