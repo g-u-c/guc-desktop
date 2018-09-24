@@ -302,6 +302,18 @@ import {
 const filePath = path.join(remote.app.getPath('userData'), '/some.file')
 console.log(filePath)
 
+const { Menu, MenuItem } = remote
+
+const menu = new Menu()
+menu.append(new MenuItem({ label: 'Copy', role: 'copy', click () { console.log('Copied') } }))
+menu.append(new MenuItem({ type: 'separator' }))
+menu.append(new MenuItem({ label: 'Paste', role: 'paste' }))
+
+window.addEventListener('contextmenu', (e) => {
+  e.preventDefault()
+  menu.popup({ window: remote.getCurrentWindow() })
+}, false)
+
 export default {
   name: 'PageDashboard',
   components: {
