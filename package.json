@@ -1,6 +1,6 @@
 {
   "name": "guc-desktop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "productName": "guc-desktop",
   "cordovaId": "org.cordova.guc-desktop.app",
