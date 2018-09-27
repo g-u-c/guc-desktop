@@ -71,10 +71,12 @@ const template = [
     submenu: [
       {
         label: 'Github Repo',
-        click () { require('electron').shell.openExternal('      {\n' +
-          '        label: \'Utopian.io\',\n' +
-          '        click () { require(\'electron\').shell.openExternal(\'https://utopian.io\') }\n' +
-          '      }') }
+        click () {
+          require('electron').shell.openExternal('      {\n' +
+          '        label: \'Github Repo\',\n' +
+          '        click () { require(\'electron\').shell.openExternal(\'https://github.com/g-u-c/guc-desktop\') }\n' +
+          '      }')
+        }
       },
       {
         label: 'Utopian.io',
