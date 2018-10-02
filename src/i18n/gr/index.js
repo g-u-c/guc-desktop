@@ -2,32 +2,32 @@ export default {
   pages: {
     interface: {
       config: {
-        label: 'Config',
+        label: 'Ρυθμίσεις',
         steemAccount: {
-          label: 'Steem Account',
-          hint: 'Which Steem Account will you use to post?'
+          label: 'Λογαριασμός Steem',
+          hint: 'Ποιό λογαριασμό Steem θα χρησιμοποιήσετε για να αναρτήσετε;'
         },
         gitUser: {
-          label: 'Github Username',
-          hint: 'Enter your username, not an org name!'
+          label: 'Όνομα Χρήστη Github',
+          hint: 'Εισάγετε το όνομα χρήστη σας, όχι όνομα οργανισμού!'
         },
         steemPassword: {
-          label: 'Password',
-          hint: 'Your credentials will never be stored or sent π¤'
+          label: 'Κωδικός',
+          hint: 'Τα στοιχεία σας δε θα αποθηκευτούν και δε θα αποσταλούν ποτέ ??'
         },
-        usePostingKey: 'Use Posting Key',
-        experimental: 'experimental',
+        usePostingKey: 'Χρήση Κλειδιού Ανάρτησης',
+        experimental: 'πειραματικό',
         steemPostingKey: {
-          label: 'Posting Key',
-          hint: 'Don\'t use your master key!'
+          label: 'Κλειδί Ανάρτησης',
+          hint: 'Μη χρησιμοποιείτε το κύριο κλειδί σας!'
         },
         gitRepo: {
-          label: 'GIT Repo',
+          label: 'Αποθετήριο GIT',
           hint: 'https://github.com/g-u-c/guc-desktop'
         },
         workingDirectory: {
-          label: 'Working Directory',
-          hint: 'Where is the project located on your machine?'
+          label: 'Φάκελος Εργασίας',
+          hint: 'Που βρίσκεται το έργο στον υπολογιστή σας;'
         },
         commitId: {
           label: 'Commit ID',
@@ -35,22 +35,22 @@ export default {
         }
       },
       edit: {
-        label: 'Edit',
-        tags: 'Tags',
-        postTitle: 'Post Title'
+        label: 'Επεξεργασία',
+        tags: 'Ετικέτες',
+        postTitle: 'Τίτλος Ανάρτησης'
       },
       review: {
-        label: 'Review'
+        label: 'Αναθεώρηση'
       },
       inform: {
-        label: 'Inform',
-        p1: 'Git-Utopian-Contributor (G-U-C) is a tool that was made to enhance the publishing workflow for developers who want to share their work with the Steem and Utopian communities.',
-        p2: 'Basically, this app allows you to add comments (and sort of hide them) in GIT notes. You will be able to document your work within GIT, and then publish this work (and parts of it) to the Steem blockchain. The post is structured and tagged to be relevant to the topic of open-source software development.',
-        p3: 'Made in the context of the Utopian Hackathon, September, 2018.<br><br>MIT License.<br>Team: nothingismagick, DrSensor, decebal'
+        label: 'Ενημέρωση',
+        p1: 'Το Git-Utopian-Contributor (G-U-C) είναι ένα εργαλείο που δημιουργήθηκε με σκοπό την ενίσχυση της εργασίας δημοσιεύσεων των προγραμματιστών που θέλουν να διαμοιραστούν τη δουλειά τους με τις κοινότητες του Steem και του Utopian.',
+        p2: 'Με λίγα λόγια, η εφαρμογή σας επιτρέπει να προσθέτετε σχόλια (ή και κατα κάποιο τρόπο να αφαιρείτε σχόλια) απο τις σημειώσεις του GIT. Θα μπορείτε να καταγράφετε τη δουλειά σας στο GIT και μετά να δημοσιεύσετε την δουλειά σας στο blockchain του Steem. Η ανάρτηση είναι δομημένη και ετικετοποιημένη σύμφωνα με την κατηγορία της ανάπτυξης λογισμικού ανοιχτού κώδικα.',
+        p3: 'Δημιουργήθηκε στα πλαίσια του Utopian Hackathon, Σεπτέμβριος 2018.<br><br>Άδεια MIT.<br>Ομάδα: nothingismagick, DrSensor, decebal'
       }
     },
     dashboard: {
-      title: 'Dashboard'
+      title: 'Επισκόπηση'
     }
   }
 }

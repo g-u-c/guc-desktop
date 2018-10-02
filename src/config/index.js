@@ -5,7 +5,7 @@ export default {
       { code: 'de', name: 'Deutsch', active: true },
       { code: 'fr', name: 'Français', active: true },
       { code: 'it', name: 'Italiano', active: false },
-      { code: 'gr', name: 'ελληνικά', active: false }
+      { code: 'gr', name: 'Ελληνικά', active: true }
     ],
     default: 'en',
     fallbackTo: 'en'
