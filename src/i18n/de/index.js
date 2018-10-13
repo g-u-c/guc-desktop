@@ -5,7 +5,7 @@ export default {
         label: 'Konfigurieren',
         steemAccount: {
           label: 'Steem Konto',
-          hint: 'Welchen Steem Account verwendest du zum Posten?'
+          hint: 'Welchen Steem Account verwenden Sie zum Posten?'
         },
         gitUser: {
           label: 'Github Nutzername',
