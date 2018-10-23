@@ -172,7 +172,6 @@
           style="right: 280px; bottom: 30px"
           :notes="mdModel"
           :commitId="config.commitId"
-          :workingDirectory="config.workingDirectory"
           @success="$q.notify('created')"
           @fail="message => $q.notify(message)"
         )
@@ -183,7 +182,6 @@
           color="positive"
           style="right: 150px; bottom: 30px"
           :commitId="config.commitId"
-          :workingDirectory="config.workingDirectory"
           @success="$q.notify('removed')"
           @fail="message => $q.notify(message)"
         )
@@ -345,8 +343,8 @@ export default {
         steemPassword: '',
         gitUser: '',
         gitRepo: 'https://github.com/g-u-c/guc-desktop',
-        workingDirectory: '/home/user/git/guc-desktop',
-        commitId: 'f004881'
+        workingDirectory: remote.process.env['HOME'] + '/Projects/OSS/@guc/guc-desktop',
+        commitId: 'bd12ec8'
       },
       content: {
         header: '',
@@ -370,6 +368,14 @@ export default {
         this.makeMarkdown(val)
       },
       immediate: true
+    },
+    config: {
+      handler (now, old) {
+        if (now.workingDirectory !== old.workingDirectory) {
+          process.chdir(now.workingDirectory)
+        }
+      },
+      deep: true
     }
   },
 

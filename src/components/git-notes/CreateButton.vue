@@ -7,8 +7,6 @@
 </style>
 
 <script>
-import { add } from './index'
-
 /** A button to insert notes
  * @prop {String} notes notes that want to be inserted
  * @prop {String} [commitId=HEAD] commitId SHA-1 of commits. If not provided, it will add notes in the HEAD (current commit)
@@ -24,16 +22,16 @@ export default {
       type: String,
       required: true
     },
-    commitId: String,
-    workingDirectory: String
+    commitId: String
   },
   methods: {
     add () {
-      const cwd = this.workingDirectory
-      const sha = this.commitId
-      add(this.notes, cwd, sha)
-        .then(data => this.$emit('success'))
-        .catch(data => this.$emit('fail', data.toString()))
+      try {
+        this.$git.notes.at(this.commitId).add(this.notes)
+        this.$emit('success')
+      } catch (error) {
+        this.$emit('fail', error.message)
+      }
     }
   }
 }
