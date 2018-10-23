@@ -24,7 +24,7 @@ export const show = async (cwd, sha) => {
 export const push = async (cwd) => run('git', ['push', 'origin', 'refs/notes/utopian'], { cwd })
 export const fetch = async (cwd) => {
   try {
-    const result = await run('git', ['pull', 'origin', 'refs/notes/utopian:refs/notes/utopian', '-f'], { cwd })
+    const result = await run('git', ['fetch', 'origin', 'refs/notes/utopian:refs/notes/utopian', '-f'], { cwd })
     return result.stdout
   } catch (error) { throw error }
 }
