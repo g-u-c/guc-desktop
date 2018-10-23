@@ -21,8 +21,6 @@ export const show = async (cwd, sha) => {
   } catch (error) { throw error }
 }
 
-export const add = (notes, cwd, sha) => run('git', ['notes', '--ref=utopian', 'add', '-m', `"${notes}"`, ...(sha ? [sha] : [])], { cwd })
-export const remove = (cwd, sha) => run('git', ['notes', '--ref=utopian', 'remove', ...(sha ? [sha] : [])], { cwd })
 export const push = async (cwd) => run('git', ['push', 'origin', 'refs/notes/utopian'], { cwd })
 export const fetch = async (cwd) => {
   try {

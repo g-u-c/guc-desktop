@@ -7,8 +7,6 @@
 </style>
 
 <script>
-import { remove } from './index'
-
 /** A button to remove notes
  * @prop {String} [commitId=HEAD] SHA-1 of commits. If not provided, it will remove notes in the HEAD (current commit)
  * @prop {String} [workingDirectory=process.cwd()] in case the application not runned in project directory
@@ -19,16 +17,16 @@ import { remove } from './index'
 export default {
   name: 'GitNotesRemoveButton',
   props: {
-    commitId: String,
-    workingDirectory: String
+    commitId: String
   },
   methods: {
     remove () {
-      const cwd = this.workingDirectory
-      const sha = this.commitId
-      remove(cwd, sha)
-        .then(data => this.$emit('success'))
-        .catch(data => this.$emit('fail', data.toString()))
+      try {
+        this.$git.notes.at(this.commitId).remove()
+        this.$emit('success')
+      } catch (error) {
+        this.$emit('fail', error.message)
+      }
     }
   }
 }
