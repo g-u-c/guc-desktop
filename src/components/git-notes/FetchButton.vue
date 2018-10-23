@@ -23,7 +23,7 @@ export default {
   methods: {
     fetch () {
       fetch(this.workingDirectory)
-        .then(data => this.$emit('success', data))
+        .then(data => this.$emit('success'))
         .catch(data => this.$emit('fail', data.toString()))
     }
   }

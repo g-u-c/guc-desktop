@@ -206,7 +206,7 @@
           color="positive"
           style="right: 330px; bottom: 30px"
           :workingDirectory="config.workingDirectory"
-          @success="data => $q.notify(data)"
+          @success="$q.notify('notes updated')"
           @fail="message => $q.notify(message)"
         )
         notes-push-button.droplet(
