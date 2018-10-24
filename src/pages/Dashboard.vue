@@ -214,7 +214,7 @@ export default {
       experimental: {
         steemPostingKey: false
       },
-      config: {
+      config: JSON.parse(localStorage.getItem('config')) || {
         steemAccount: '',
         steemPostingKey: '',
         steemPassword: '',
@@ -247,13 +247,14 @@ export default {
     },
     config: {
       handler (val) {
+        JSON.stringify(localStorage.setItem('config', val))
         process.chdir(val.workingDirectory)
         this.content.header = val.gitRepo ? '#### Repository\n' + val.gitRepo + '\n\n' : ''
         this.content.footer = val.gitUser ? '\n\n---\n#### GitHub Account\n' + `https://github.com/${val.gitUser}` : ''
       },
       deep: true,
       immediate: true
-    },
+    }
   },
 
   methods: {
@@ -275,14 +276,6 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .droplet {
-    border: 5px solid #fff;
-    box-shadow: none!important;
-    z-index: 2000;
-  }
-</style>
 
 <style>
   .disable {
