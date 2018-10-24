@@ -4,6 +4,21 @@
 </template>
 
 <script>
+import { remote } from 'electron'
+const { Menu, MenuItem } = remote
+
+// #region enable copy-paste on right click
+const menu = new Menu()
+menu.append(new MenuItem({ label: 'Copy', role: 'copy', click () { console.log('Copied') } }))
+menu.append(new MenuItem({ type: 'separator' }))
+menu.append(new MenuItem({ label: 'Paste', role: 'paste' }))
+
+window.addEventListener('contextmenu', (e) => {
+  e.preventDefault()
+  menu.popup({ window: remote.getCurrentWindow() })
+}, false)
+// #endregion
+
 export default {
   name: 'App',
   meta () {

@@ -1,6 +1,6 @@
 <template lang="pug">
   q-btn(icon="cloud_download" v-bind="$attrs" @click.native="fetch")
-    q-tooltip git fetch refs/notes/utopian
+    q-tooltip fetch notes
 </template>
 
 <style>

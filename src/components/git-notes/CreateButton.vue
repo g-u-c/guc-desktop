@@ -1,6 +1,6 @@
 <template lang="pug">
   q-btn(icon="add" v-bind="$attrs" @click.native="add")
-    q-tooltip git-notes add
+    q-tooltip add notes
 </template>
 
 <style>
