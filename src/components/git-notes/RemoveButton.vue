@@ -1,6 +1,6 @@
 <template lang="pug">
   q-btn(icon="delete" v-bind="$attrs" @click.native="remove")
-    q-tooltip git-notes remove
+    q-tooltip remove notes
 </template>
 
 <style>
