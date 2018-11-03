@@ -31,7 +31,7 @@ export default {
         },
         commitId: {
           label: 'Commit ID',
-          hint: 'e.g c0ff3, HEAD~1, or HEAD~1^2'
+          hint: 'C0FF33'
         }
       },
       edit: {

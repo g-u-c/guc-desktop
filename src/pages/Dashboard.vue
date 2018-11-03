@@ -155,24 +155,80 @@
               pre(
                 v-model="model_ce"
                 :contenteditable="contentEditable"
-                @blur="content.body = model_ce"
-              ) {{ content.header }}{{ content.body }}{{ content.footer }}
-            q-checkbox(v-model="toHTML" @input="makeMarkdown(content.body, toHTML)") HTML
+                @blur="mdModel = model_ce"
+              ) {{ content.header }}{{ mdModel }}{{ content.footer }}
+            q-checkbox(v-model="toHTML" @input="makeMarkdown(mdModel, toHTML)") HTML
             span &nbsp;&nbsp;&nbsp;&nbsp;
             q-checkbox.disable(v-model="contentEditable" @input="!contentEditable")
               |EDIT
               span.experimental (danger!!!)
             br
             br
-
-        action-button(
-          :config="config"
-          :content="content"
-          :post-title="postTitle"
-          :post-tags="tags"
+        notes-create-button.droplet(
+          round
+          class="fixed"
+          size="md"
+          color="positive"
+          style="right: 280px; bottom: 30px"
+          :notes="mdModel"
+          :commitId="config.commitId"
+          @success="$q.notify('created')"
+          @fail="message => $q.notify(message)"
+        )
+        notes-remove-button.droplet(
+          round
+          class="fixed"
+          size="md"
+          color="positive"
+          style="right: 150px; bottom: 30px"
+          :commitId="config.commitId"
+          @success="$q.notify('removed')"
+          @fail="message => $q.notify(message)"
+        )
+        steem-post-button.droplet(
+          round
+          class="fixed"
+          size="24px"
+          color="blue"
+          style="right: 200px; bottom: 20px"
+          :username="config.steemAccount"
+          :title="postTitle"
+          :body="mdModel"
+          :password="experimental.steemPostingKey ? config.steemPostingKey : config.steemPassword"
+          :tags="tags"
+          @success="$q.notify('published')"
+          @fail="message => $q.notify(message)"
+        )
+        notes-fetch-button.droplet(
+          round
+          class="fixed"
+          size="md"
+          color="positive"
+          style="right: 330px; bottom: 30px"
+          :workingDirectory="config.workingDirectory"
+          @success="$q.notify('notes updated')"
+          @fail="message => $q.notify(message)"
+        )
+        notes-push-button.droplet(
+          round
+          class="fixed"
+          size="md"
+          color="positive"
+          style="right: 100px; bottom: 30px"
+          :workingDirectory="config.workingDirectory"
+          @success="$q.notify('pushed')"
+          @fail="message => $q.notify(message)"
         )
 
-        git-log(:config="config")
+        //- TODO: move to GitLog.vue
+        q-btn.droplet(
+          rounded
+          class="fixed"
+          size="12px"
+          color="faded"
+          style="left: 5px; bottom: 40px"
+          @click.native="!popup.gitLog"
+        ) {{config.commitId}}
 
       q-tab-pane.q-pa-sm(name="Inform")
         .row
@@ -191,99 +247,6 @@
           .col-1
 </template>
 
-<script>
-// import { throttle } from 'quasar' // TODO: throttle instant profile images to avoid bloating the console
-import ActionButton from '@/components/ActionButton.vue'
-import GitLog from '@/components/GitLog.vue'
-
-export default {
-  name: 'PageDashboard',
-  components: {
-    ActionButton,
-    GitLog
-  },
-
-  data () {
-    return {
-      model: 'What\'s your story today 🙂',
-      model_ce: '',
-      toHTML: false,
-      contentEditable: false,
-      tags: ['utopian-io', 'development'],
-      postTitle: '',
-      experimental: {
-        steemPostingKey: false
-      },
-      config: {
-        steemAccount: '',
-        steemPostingKey: '',
-        steemPassword: '',
-        gitUser: '',
-        gitRepo: 'https://github.com/',
-        workingDirectory: '',
-        commitId: ''
-      },
-      content: {
-        header: '',
-        body: '',
-        footer: ''
-      }
-    }
-  },
-
-  meta () {
-    return {
-      title: 'Dashboard'
-    }
-  },
-
-  watch: {
-    'experimental.steemPostingKey' (val) { if (!val) this.config.steemPostingKey = '' },
-    model: {
-      handler (val) {
-        this.makeMarkdown(val)
-      },
-      immediate: true
-    },
-    config: {
-      handler (val) {
-        process.chdir(val.workingDirectory)
-        this.content.header = val.gitRepo ? '#### Repository\n' + val.gitRepo + '\n\n' : ''
-        this.content.footer = val.gitUser ? '\n\n---\n#### GitHub Account\n' + `https://github.com/${val.gitUser}` : ''
-      },
-      deep: true,
-      immediate: true
-    },
-  },
-
-  methods: {
-    makeMarkdown (data, html) {
-      if (this.toHTML === true || html === true) {
-        this.content.body = this.$marked(data)
-      } else {
-        this.content.body = this.$turndown.turndown(data)
-      }
-    },
-    steemTag () { // A function to lowercase, hyphenate and truncate the tags
-      this.tags = this.tags.slice(0, 5)
-      this.tags.forEach((tag, index) => {
-        this.tags[index] = tag.toLowerCase()
-          .replace(/[._— ]/g, '-')
-          .replace(/[^a-z0-9-]/gi, '')
-      })
-    }
-  }
-}
-</script>
-
-<style scoped>
-  .droplet {
-    border: 5px solid #fff;
-    box-shadow: none!important;
-    z-index: 2000;
-  }
-</style>
-
 <style>
   .disable {
     cursor: pointer;
@@ -293,6 +256,11 @@ export default {
     margin-left: 5px;
     color: rgb(168, 106, 106);
     font-weight: bold;
+  }
+  .droplet {
+    border: 5px solid #fff;
+    box-shadow: none!important;
+    z-index: 2000;
   }
   .q-tabs-bar {
     border-bottom-width:6px!important;
@@ -315,3 +283,123 @@ export default {
     white-space: pre-wrap;
   }
 </style>
+
+<script>
+// import { debounce } from 'quasar'
+import path from 'path'
+import { remote } from 'electron'
+
+import SteemPostButton from '@/components/steem/PostButton.vue'
+import {
+  NotesCreateButton,
+  NotesFetchButton,
+  NotesPushButton,
+  NotesRemoveButton
+} from '@/components/git-notes'
+
+const filePath = path.join(remote.app.getPath('userData'), '/some.file')
+console.log(filePath)
+
+const { Menu, MenuItem } = remote
+
+const menu = new Menu()
+menu.append(new MenuItem({ label: 'Copy', role: 'copy', click () { console.log('Copied') } }))
+menu.append(new MenuItem({ type: 'separator' }))
+menu.append(new MenuItem({ label: 'Paste', role: 'paste' }))
+
+window.addEventListener('contextmenu', (e) => {
+  e.preventDefault()
+  menu.popup({ window: remote.getCurrentWindow() })
+}, false)
+
+export default {
+  name: 'PageDashboard',
+  components: {
+    SteemPostButton,
+    NotesCreateButton,
+    NotesFetchButton,
+    NotesPushButton,
+    NotesRemoveButton
+  },
+
+  data () {
+    return {
+      model: 'Hola!',
+      mdModel: 'Hola!',
+      model_ce: '',
+      toHTML: false,
+      contentEditable: false,
+      tags: ['utopian-io', 'development', 'hackathon', 'quasarframework'],
+      postTitle: 'Hello World',
+      experimental: {
+        steemPostingKey: false
+      },
+      popup: { // TODO: move to GitLog.vue
+        gitLog: false
+      },
+      config: {
+        steemAccount: '',
+        steemPostingKey: '',
+        steemPassword: '',
+        gitUser: '',
+        gitRepo: 'https://github.com/g-u-c/guc-desktop',
+        workingDirectory: remote.process.env['HOME'] + '/Projects/OSS/@guc/guc-desktop',
+        commitId: 'bd12ec8'
+      },
+      content: {
+        header: '',
+        footer: ''
+      }
+      // props: {
+      //   maximum_block_size: this.main().catch()
+      // }
+    }
+  },
+
+  meta () {
+    return {
+      title: 'Dashboard'
+    }
+  },
+
+  watch: {
+    model: {
+      handler (val, oldVal) {
+        this.makeMarkdown(val)
+      },
+      immediate: true
+    },
+    config: {
+      handler (now, old) {
+        if (now.workingDirectory !== old.workingDirectory) {
+          process.chdir(now.workingDirectory)
+        }
+      },
+      deep: true
+    }
+  },
+
+  mounted () {
+    this.content.header = '#### Repository\n' + this.config.gitRepo + '\n\n'
+    this.content.footer = '\n\n---\n#### GitHub Account\n' + `https://github.com/${this.config.gitUser}`
+  },
+
+  methods: {
+    makeMarkdown (data, html) {
+      if (this.toHTML === true || html === true) {
+        this.mdModel = this.$marked(data)
+      } else {
+        this.mdModel = this.$turndown.turndown(data)
+      }
+    },
+    steemTag () { // A function to lowercase, hyphenate and truncate the tags
+      this.tags = this.tags.slice(0, 5)
+      this.tags.forEach((tag, index) => {
+        this.tags[index] = tag.toLowerCase()
+          .replace(/[._— ]/g, '-')
+          .replace(/[^a-z0-9-]/gi, '')
+      })
+    }
+  }
+}
+</script>

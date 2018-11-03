@@ -1,22 +1,12 @@
 <template lang="pug">
-  q-btn.droplet(
-    rounded
-    class="fixed"
-    size="12px"
-    color="faded"
-    style="left: 5px; bottom: 40px"
-    @click.native="popup = !popup"
-  ) {{config.commitId}}
+  div
+    q-btn {{commitId}}
 </template>
 
 <script>
-// [WIP]
 export default {
   name: 'GitLog',
-  props: ['config'],
-  data: () => ({
-    popup: false
-  }),
+  props: ['commitId'],
   methods: {
     checkout () {
       this.$emit('commitId', this.commitId)
@@ -24,11 +14,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .droplet {
-    border: 5px solid #fff;
-    box-shadow: none!important;
-    z-index: 2000;
-  }
-</style>
