@@ -247,15 +247,14 @@ export default {
       immediate: true
     },
     config: {
-      handler (val, old) {
-        const { workingDirectory, gitUser, gitRepo, commitId } = val
+      handler (val) {
+        const { workingDirectory, gitUser, gitRepo } = val
 
         localStorage.setItem('config', JSON.stringify(val))
         if (isDirExists(workingDirectory)) process.chdir(workingDirectory)
 
         this.content.header = gitRepo ? '#### Repository\n' + gitRepo + '\n\n' : ''
         this.content.footer = gitUser ? '\n\n---\n#### GitHub Account\n' + `https://github.com/${gitUser}` : ''
-        try { this.model = this.$git.notes.at(commitId).show() } catch {}
       },
       deep: true,
       immediate: true
