@@ -9,8 +9,7 @@ module.exports = function (ctx) {
     plugins: [
       'i18n',
       'dsteem',
-      'marked',
-      'git'
+      'marked'
     ],
     css: [
       'app.styl'
@@ -43,8 +42,6 @@ module.exports = function (ctx) {
         chain.resolve.alias
           .set('~', __dirname)
           .set('@', path.resolve(__dirname, 'src'))
-        // chain.externals(['child_process']) // surprisingly it's not needed 🤔 WHY??
-        // ☝️ https://github.com/webpack/webpack.js.org/issues/107#issuecomment-320439771
       }
     },
     devServer: {

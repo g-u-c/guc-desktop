@@ -4334,10 +4334,6 @@ flatten@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
 
-fluent-git@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/fluent-git/-/fluent-git-0.1.1.tgz#c8334f79acac6e349340680a33adcbcb2ff64549"
-
 flush-write-stream@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/flush-write-stream/-/flush-write-stream-1.0.3.tgz#c5d586ef38af6097650b49bc41b55fabb19f35bd"
