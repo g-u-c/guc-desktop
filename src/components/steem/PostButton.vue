@@ -4,7 +4,6 @@
 </template>
 
 <script>
-import pkg from '~/package.json'
 import { PrivateKey } from 'dsteem'
 
 /** Creates an account, note that almost no validation is done.
@@ -55,14 +54,11 @@ export default {
         body: this.body,
         title: this.title,
         json_metadata: JSON.stringify({
-          app: `${pkg.name}/${pkg.version}`,
-          format: 'markdown',
-          community: this.tags[0],
           tags: this.tags
         }),
         parent_author: '',
         parent_permlink: this.tags[0],
-        permlink: this.title
+        permlink: new Date().toISOString().replace(/[^a-zA-Z0-9]+/g, '').toLowerCase()
       }, key)
         .then(result => this.$emit('success', result))
         .catch(error => this.$emit('fail', error))
