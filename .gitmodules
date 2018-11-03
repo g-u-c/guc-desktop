@@ -1,3 +1,0 @@
-[submodule "test/fixture"]
-	path = test/fixture
-	url = git@github.com:DrSensor/example-git-notes

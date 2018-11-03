@@ -43,7 +43,6 @@ export const mountQuasar = (component, options = {}) => {
   }
 
   return mount(component, {
-    ...options,
     localVue: localVue,
     store,
     router,
