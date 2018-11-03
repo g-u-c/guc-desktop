@@ -29,30 +29,41 @@
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
             q-btn(
-              round
-              v-if="config.gitUser"
-              :style="`background-image: url('https://github.com/${config.gitUser}.png')!important; background-size: 42px 42px!important;`"
+            round
+            v-if="config.gitUser"
+            :style="`background-image: url('https://github.com/${config.gitUser}.png')!important; background-size: 42px 42px!important;`"
             )
           q-item-main
             q-input(
               v-model="config.gitUser"
-              :float-label="$t('pages.interface.config.gitUser.label')"
-              :placeholder="$t('pages.interface.config.gitUser.hint')"
+            :float-label="$t('pages.interface.config.gitUser.label')"
+            :placeholder="$t('pages.interface.config.gitUser.hint')"
             )
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
             q-btn(
               round
-              v-if="config.steemPostingKey"
+              v-if="(experimental.steemPostingKey ? config.steemPostingKey : false) || config.steemPassword"
               icon="fas fa-key"
             )
           q-item-main
             q-input(
-              type="password"
-              v-model="config.steemPostingKey"
-              :float-label="$t('pages.interface.config.steemPostingKey.label')"
-              :placeholder="$t('pages.interface.config.steemPostingKey.hint')"
+            v-if="experimental.steemPostingKey"
+            type="password"
+            v-model="config.steemPostingKey"
+            :float-label="$t('pages.interface.config.steemPostingKey.label')"
+            :placeholder="$t('pages.interface.config.steemPostingKey.hint')"
             )
+            q-input(
+            v-else
+            type="password"
+            v-model="config.steemPassword"
+            :float-label="$t('pages.interface.config.steemPassword.label')"
+            :placeholder="$t('pages.interface.config.steemPassword.hint')"
+            )
+            q-checkbox.disable(style="transform: scale(1)" v-model="experimental.steemPostingKey" @input="!experimental.steemPostingKey")
+              sup(style="margin-left: 5px") {{ $t('pages.interface.config.usePostingKey') }}
+                span.experimental ({{ $t('pages.interface.config.experimental') }})
 
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -63,9 +74,9 @@
             )
           q-item-main
             q-input(
-              v-model="config.gitRepo"
-              :float-label="$t('pages.interface.config.gitRepo.label')"
-              :placeholder="$t('pages.interface.config.gitRepo.hint')"
+            v-model="config.gitRepo"
+            :float-label="$t('pages.interface.config.gitRepo.label')"
+            :placeholder="$t('pages.interface.config.gitRepo.hint')"
             )
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -76,9 +87,9 @@
             )
           q-item-main
             q-input(
-              v-model="config.workingDirectory"
-              :float-label="$t('pages.interface.config.workingDirectory.label')"
-              :placeholder="$t('pages.interface.config.workingDirectory.hint')"
+            v-model="config.workingDirectory"
+            :float-label="$t('pages.interface.config.workingDirectory.label')"
+            :placeholder="$t('pages.interface.config.workingDirectory.hint')"
             )
         q-item.col-md-6
           q-item-side(color='secondary' style="margin-left:-1px")
@@ -89,9 +100,9 @@
             )
           q-item-main
             q-input(
-              v-model="config.commitId"
-              :float-label="$t('pages.interface.config.commitId.label')"
-              :placeholder="$t('pages.interface.config.commitId.hint')"
+            v-model="config.commitId"
+            :float-label="$t('pages.interface.config.commitId.label')"
+            :placeholder="$t('pages.interface.config.commitId.hint')"
             )
 
       q-tab-pane.q-pa-sm.row(name="Edit")
@@ -143,12 +154,12 @@
             .markdownDisplay
               pre(
                 v-model="model_ce"
-                :contenteditable="experimental.contentEditable"
+                :contenteditable="contentEditable"
                 @blur="content.body = model_ce"
               ) {{ content.header }}{{ content.body }}{{ content.footer }}
             q-checkbox(v-model="toHTML" @input="makeMarkdown(content.body, toHTML)") HTML
             span &nbsp;&nbsp;&nbsp;&nbsp;
-            q-checkbox.disable(v-model="experimental.contentEditable" @input="!experimental.contentEditable")
+            q-checkbox.disable(v-model="contentEditable" @input="!contentEditable")
               |EDIT
               span.experimental (danger!!!)
             br
@@ -182,12 +193,8 @@
 
 <script>
 // import { throttle } from 'quasar' // TODO: throttle instant profile images to avoid bloating the console
-import { lstatSync, existsSync } from 'fs'
 import ActionButton from '@/components/ActionButton.vue'
 import GitLog from '@/components/GitLog.vue'
-
-const isDirExists = dirPath => existsSync(dirPath) && lstatSync(dirPath).isDirectory()
-const isEmptyObject = obj => !obj ? true : (Object.keys(obj).length === 0) && obj.constructor === Object
 
 export default {
   name: 'PageDashboard',
@@ -197,23 +204,22 @@ export default {
   },
 
   data () {
-    const experimental = JSON.parse(localStorage.getItem('experimental'))
     return {
       model: 'What\'s your story today 🙂',
       model_ce: '',
       toHTML: false,
+      contentEditable: false,
       tags: ['utopian-io', 'development'],
       postTitle: '',
-      experimental: isEmptyObject(experimental) ? {
-        // DEFINE experimental feature here
-        contentEditable: false
-      } : experimental,
+      experimental: {
+        steemPostingKey: false
+      },
       config: JSON.parse(localStorage.getItem('config')) || {
         steemAccount: '',
         steemPostingKey: '',
-        // steemPassword: '', // obselete since issue#14 is fixed
+        steemPassword: '',
         gitUser: '',
-        gitRepo: '',
+        gitRepo: 'https://github.com/',
         workingDirectory: '',
         commitId: ''
       },
@@ -232,14 +238,7 @@ export default {
   },
 
   watch: {
-    experimental: {
-      handler (val) {
-        const { contentEditable, ...whitelist } = val
-        localStorage.setItem('experimental', JSON.stringify(whitelist))
-        // INSERT custom logic for experimental feature here
-      },
-      deep: true
-    },
+    'experimental.steemPostingKey' (val) { if (!val) this.config.steemPostingKey = '' },
     model: {
       handler (val) {
         this.makeMarkdown(val)
@@ -248,13 +247,10 @@ export default {
     },
     config: {
       handler (val) {
-        const { workingDirectory, gitUser, gitRepo } = val
-
-        localStorage.setItem('config', JSON.stringify(val))
-        if (isDirExists(workingDirectory)) process.chdir(workingDirectory)
-
-        this.content.header = gitRepo ? '#### Repository\n' + gitRepo + '\n\n' : ''
-        this.content.footer = gitUser ? '\n\n---\n#### GitHub Account\n' + `https://github.com/${gitUser}` : ''
+        JSON.stringify(localStorage.setItem('config', val))
+        process.chdir(val.workingDirectory)
+        this.content.header = val.gitRepo ? '#### Repository\n' + val.gitRepo + '\n\n' : ''
+        this.content.footer = val.gitUser ? '\n\n---\n#### GitHub Account\n' + `https://github.com/${val.gitUser}` : ''
       },
       deep: true,
       immediate: true
